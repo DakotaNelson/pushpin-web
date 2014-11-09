@@ -8,17 +8,19 @@
 <script type="text/javascript">
 
 var map;
-%s // initialize empty arrays here, for example: var flickr = [];
-   // options include: flickr, picasa, shodan, twitter, youtube
 var markers = [];
-var sources = [];
-var data = {};
+var rawData = {{ pushpins|safe }};
+var cleanData = [];
+
+rawData.forEach( function(datum) {
+    cleanData.push(datum.fields);
+    });
 
 // initializes the map interface
 function showMap() {
-    var lat = %s;
-    var lon = %s;
-    var rad = %s;
+    var lat = {{ location.latitude }};
+    var lon = {{ location.longitude }};
+    var rad = {{ location.radius }};
     var coords = new google.maps.LatLng(lat,lon);
     var mapOptions = {
         zoom: 15,
@@ -64,16 +66,20 @@ function showMap() {
         google.maps.event.addListener(marker, 'click', function() {
             infowindow.open(map,marker);
         });
-        if (typeof source !== 'undefined') {
+        /*if (typeof source !== 'undefined') {
             window[source].push(marker);
             if(!(window.data.hasOwnProperty(source))) { window.data[source] = []; }
             window.data[source].push(place.details.match(/<span class='time'>(.*?)<\/span>/i)[1]); // I had 99 problems, so I used regular expressions
             window.sources.push(source);
-        }
+        }*/
     }
 
     add_marker({position:coords,title:"Epicenter",icon:"http://maps.google.com/mapfiles/ms/icons/green-dot.png",map:map},{details:"Epicenter:<br />" + lat + "," + lon + "<br />Radius: " + rad + "km"});
-%s
+
+    cleanData.forEach(function(pin) {
+      add_marker({position: new google.maps.LatLng(pin.latitude, pin.longitude) , title: pin.screen_name, icon: pin.thumb_url, map:map}, {details: pin.message}, pin.source);
+      // TODO fill out details in to HTML template
+    });
 
   /*
      example input here:
@@ -421,7 +427,9 @@ input[type=checkbox] {
 <body>
     <div id="nav" class="nav rounded shaded">
         <div id="filter">
-%s
+          {% for source in sources %}
+            <input type="checkbox" id="{{ source }}" onchange="toggleMarkers('{{ source }}');" checked="checked"/>{{ source }}<br />
+          {% endfor %}
 <!-- example input here:
 <input type="checkbox" id="flickr" onchange="toggleMarkers('flickr');" checked="checked"/>Flickr<br />
      options include: flickr, picasa, shodan, twitter, youtube

@@ -56,4 +56,4 @@ class Keys(models.Model):
     user = models.OneToOneField(User, primary_key=True)
 
     def __str__(self):
-        return self.user + "'s API keys"
+        return str(self.user)
