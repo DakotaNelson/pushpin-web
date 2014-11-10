@@ -18,6 +18,8 @@ def mapLocation(request):
     sources = []
 
     for pin in pushpins:
+        pin.source = pin.get_source_display()
+        # get the display name, rather than the two letter abbreviation
         if pin.source not in sources:
             sources.append(pin.source)
 

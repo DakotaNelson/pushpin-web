@@ -13,17 +13,17 @@ var TIMELINE = {
   createTimeline: function(data) {
     if (TIMELINE.active == null) {
       // if the list of active sources hasn't been initialized, do so
-      TIMELINE.active = d3.keys(data);
+      TIMELINE.active = d3.values(_.pluck(data, 'source'));
       TIMELINE.active.push('total');
     }
 
-    var clean = TIMELINE.cleanData(data);
-    TIMELINE.render(clean);
+    TIMELINE.cleanData(data);
+    TIMELINE.render();
   },
 
   update: function() {
     TIMELINE.clear();
-    TIMELINE.render(TIMELINE.data);
+    TIMELINE.render();
   },
 
   clear: function() {
@@ -53,27 +53,43 @@ var TIMELINE = {
     //var active = d3.keys(timelineData);
     //TIMELINE.active = active;
 
-    var dateFormat = d3.time.format("%%Y-%%m-%%d %%H:%%M:%%S");
+    var dateFormat = d3.time.format("%Y-%m-%dT%H:%M:%SZ");
 
-    d3.entries(timelineData).forEach(function(entry) {
-      timelineData[entry.key] = entry.value.map(function(time) { return dateFormat.parse(time); });
-      // format all of the dates as date objects instead of strings and remove anything older than 5 years
+    console.log(timelineData);
+    timelineData.map(
+      function(datum) {
+        console.log(datum.date);
+        datum.date = dateFormat.parse(datum.date);
+        return datum;
+      });
+    // format all of the dates as date objects instead of strings and remove anything older than 5 years
+
+    console.log(timelineData);
+    timelineData.filter(
+      function(datum) {
+        if(new Date().getFullYear() - datum.date.getFullYear() < 5) {
+          return true;
+        }
+        return false;
     });
-
-    d3.entries(timelineData).forEach(function(entry) {
-      timelineData[entry.key] = entry.value.filter(function(time) { console.log(time); if(new Date().getFullYear() - time.getFullYear() < 5) { return true; } return false; });
-      // filter out any pins older than 4ish years
-    });
-
-    var allData = d3.merge(d3.values(timelineData)); // all of the retrieved objects in one giant var
+    // filter out any pins older than 4ish years
 
     //var weird = allData.filter(function(item) { if(item.getFullYear() < 1995) { return true; } return false; });
     //console.log(weird);
 
-    TIMELINE.minTime = d3.min(allData).getTime();
-    TIMELINE.maxTime = d3.max(allData).getTime();
+    TIMELINE.minTime = d3.min(timelineData,
+        function(d) { return d.date;}).getTime();
+    TIMELINE.maxTime = d3.max(timelineData,
+        function(d) { return d.date;}).getTime();
 
     TIMELINE.binSize = (TIMELINE.maxTime - TIMELINE.minTime) / TIMELINE.numBins;
+
+    // create data that's grouped by source
+    var sourceData = _.groupBy(timelineData,
+        function(datum){ return datum.source; }
+        );
+
+    console.log(sourceData);
 
     // Initialize series structure.
     var series = {};
@@ -89,10 +105,10 @@ var TIMELINE = {
     }
 
     // Bin pins.
-    d3.entries(timelineData).forEach(function(entry) {
+    d3.entries(sourceData).forEach(function(entry) {
       entry.value.map(function(pin) {
         var source = entry.key;
-        var time = pin.getTime();
+        var time = pin.date.getTime();
         var bindex = Math.floor((time-TIMELINE.minTime)/TIMELINE.binSize); // the index of the bin this pin goes in (for great win)
 
         if (0 <= bindex && bindex <= TIMELINE.numBins) {
@@ -117,14 +133,13 @@ var TIMELINE = {
       res.push({label:key, values:series[key]});
     }
     TIMELINE.data = res;
-    return res;
   },
 
 
-  render: function(timelineData) {
+  render: function() {
 
     // first: filter the data so we're only rendering the active set
-    timelineData = timelineData.filter( function(item) {
+    timelineData = TIMELINE.data.filter( function(item) {
       if(TIMELINE.active.indexOf(item.label) != -1) {
         return true;
       }
@@ -162,11 +177,11 @@ var TIMELINE = {
                       .tickSize(-width)
                       .tickFormat(d3.format("d"));
 
-    var all_styles = {'flickr':{color: '#FF9900', width: '1px', fillOpacity: '0.2'},
-                      'picasa':{ color: '#7E55FC', width: '1px', fillOpacity: '0.2'},
-                      'shodan':{ color: '#FCF357', width: '1px', fillOpacity: '0.2'},
-                      'twitter':{ color: '#5781FC', width: '1px', fillOpacity: '0.2'},
-                      'youtube':{ color: '#FC6355', width: '1px', fillOpacity: '0.2'},
+    var all_styles = {'Flickr':{color: '#FF9900', width: '1px', fillOpacity: '0.2'},
+                      'Picasa':{ color: '#7E55FC', width: '1px', fillOpacity: '0.2'},
+                      'Shodan':{ color: '#FCF357', width: '1px', fillOpacity: '0.2'},
+                      'Twitter':{ color: '#5781FC', width: '1px', fillOpacity: '0.2'},
+                      'Youtube':{ color: '#FC6355', width: '1px', fillOpacity: '0.2'},
                       'total':{ color: 'Black', width: '1px', fillOpacity: '0.2'}};
 
     var active_styles = TIMELINE.active.map( function(item) { return all_styles[item];  } );
@@ -187,7 +202,7 @@ var TIMELINE = {
                      .interpolate("basis");
 
     var series = svg.selectAll(".series")
-                      .data(timelineData)
+                      .data(TIMELINE.data)
                     .enter().append("g")
                       .attr("class","series");
 

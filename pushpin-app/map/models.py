@@ -16,15 +16,24 @@ class Location(models.Model):
 
 class Pushpin(models.Model):
     # one piece of information (one tweet, one flickr photo, etc.)
+    TWITTER = "TW"
+    FLICKR = "FL"
+    PICASA = "PI"
+    SHODAN = "SH"
+    YOUTUBE = "YU"
+    FACEBOOK = "FB"
+    LINKEDIN = "LI"
+
     SOURCES = (
-                ("TW", "Twitter"),
-                ("FL", "Flickr"),
-                ("PI", "Picasa"),
-                ("SH", "Shodan"),
-                ("YU", "Youtube"),
-                ("FB", "Facebook"),
-                ("LI", "LinkedIn")
+                (TWITTER, "Twitter"),
+                (FLICKR, "Flickr"),
+                (PICASA, "Picasa"),
+                (SHODAN, "Shodan"),
+                (YOUTUBE, "Youtube"),
+                (FACEBOOK, "Facebook"),
+                (LINKEDIN, "LinkedIn")
               )
+
     source = models.CharField(choices=SOURCES, max_length=2)
     date = models.DateTimeField('date published')
     screen_name = models.CharField(max_length=100)
