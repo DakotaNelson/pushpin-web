@@ -1,20 +1,19 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext, loader
 from django.core import serializers
 
 from map.models import Pushpin, Location
 
 
 def mapLocation(request):
-    location = get_object_or_404(Location, name="Center of the World")
-    print(location)
+    locName = "Center of the World"
+
+    location = get_object_or_404(Location, name=locName)
 
     # then get pins based on that location
-    # pushpins = get_list_or_404(Pushpin, location
+    pushpins = Pushpin.objects.filter(location__name=locName)
 
-    # for now, just get all pins
-    pushpins = get_list_or_404(Pushpin.objects.all())
+    # or just get all pins
+    #pushpins = get_list_or_404(Pushpin.objects.all())
 
     sources = []
 
@@ -22,14 +21,13 @@ def mapLocation(request):
         if pin.source not in sources:
             sources.append(pin.source)
 
-    print(pushpins)
+    #template = loader.get_template('map/index.html')
 
-    template = loader.get_template('map/index.html')
+    context = {
+                'sources': sources,
+                'location': location,
+                'pushpins': serializers.serialize('json', pushpins)
+              }
 
-    context = RequestContext( request, {
-        'sources': sources,
-        'location': location,
-        'pushpins': serializers.serialize('json', pushpins)
-        })
-
-    return HttpResponse(template.render(context))
+    #return HttpResponse(template.render(context))
+    return render(request, 'map/index.html', context)
