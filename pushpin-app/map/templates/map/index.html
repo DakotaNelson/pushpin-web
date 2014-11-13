@@ -53,9 +53,33 @@ td {
     border-radius: 0px;
 }
 #timeline {
-  width: 100%%;
-  height: 20%%;
+  display: inline-block;
+  width: 80%;
+  height: 20%;
   font: 12px sans-serif;
+}
+#locations {
+  float: left;
+  overflow: hidden;
+  display: inline-block;
+  width: 20%;
+  height:20%;
+}
+#locations table {
+  width: 100%;
+  margin-top: 3px;
+  margin-left: 3px;
+  font: 12px sans-serif;
+  border-collapse: collapse;
+  text-align: center;
+}
+#locations table thead {
+  background-color: #a8a8a8;
+  cursor: default;
+}
+#locations table tbody:hover {
+  cursor: pointer;
+  background-color: lightgrey;
 }
 .axis path {
   fill: none;
@@ -127,6 +151,28 @@ input[type=checkbox] {
         <div id="summary"></div>
     </div>
     <div class="map" id="map"></div>
+    <div id="locations">
+      <table>
+        <thead>
+          <td> Location Name </td>
+          <td> Lat </td>
+          <td> Lon </td>
+          <td> Radius (km) </td>
+          <td> Created </td>
+        </thead>
+        <tbody>
+        {% for loc in locations %}
+        <tr onclick="document.location = '{% url 'map location' loc.name %}'">
+            <td> {{ loc.name|truncatechars:20 }} </td>
+            <td> {{ loc.latitude }} </td>
+            <td> {{ loc.longitude }} </td>
+            <td> {{ loc.radius }} </td>
+            <td> {{ loc.date|date:"m/d/y" }} </td>
+          </tr>
+        </tbody>
+        {% endfor %}
+      </table>
+    </div>
     <div id="timeline"></div>
 </body>
 </html>

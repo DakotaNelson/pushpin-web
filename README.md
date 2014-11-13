@@ -5,16 +5,17 @@ Good instructions on usage coming soon.
 
 ### Quick (and incomplete) list of dependencies:
 
- * django
- * python 3
- * postgreSQL
+ * django >= 1.7.1
+ * python >= 3.3.3
+ * postgreSQL >= 9.2.8
+ * psycopg2 >= 2.5.4
 
 ### Rough notes on local usage:
 
 * In `pushpin-web/static`, run `python -m http.server 8001`. This is to serve static files, because doing so with Django will make you feel many terrible feels.
 * Run `postmaster -D ./db/` to start the PostgreSQL server, where `./db/` is a directory you create to hold the database.
-* cd to `pushpin-web/pushpin-app` and run `python manage.py migrate`
-* Then run `python manage.py runserver`
+* cd to `pushpin-web/pushpin-app` and run `python manage.py migrate` to set up the database
+* Then run `python manage.py runserver` to start the django server
 
 ### To deploy:
 

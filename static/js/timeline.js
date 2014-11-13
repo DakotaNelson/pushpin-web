@@ -150,7 +150,7 @@ var TIMELINE = {
     TIMELINE.height = container.node().offsetHeight;
 
     // add margins
-    var margin = {"top":10, "right":30, "bottom":30, "left":60};
+    var margin = {"top":10, "right":30, "bottom":30, "left":30};
     var width = TIMELINE.width - margin.left - margin.right;
     var height = TIMELINE.height - margin.top - margin.bottom; // this handles margins for us
 
