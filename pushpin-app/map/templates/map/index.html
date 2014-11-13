@@ -12,33 +12,23 @@
 
 <script type="text/javascript">
 
-var rawData = {{ pushpins|safe }};
-var cleanData = [];
+  var rawData = {{ pushpins|safe }};
+  var cleanData = [];
 
-rawData.forEach( function(datum) {
+  rawData.forEach( function(datum) {
     cleanData.push(datum.fields);
     });
 
-function init() {
-
-  /*
-     example input here:
-     add_marker(
-     {position: new google.maps.LatLng(42.297276,-71.26462),title:"preschang",icon:"http://maps.google.com/mapfiles/ms/icons/orange-dot.png",map:map},
-     {details:"<table><tr><td class='prof_cell'><a href='https://farm4.staticflickr.com/3929/15391622816_6e1b496075.jpg' target='_blank'><img class='prof_img rounded' src='https://farm4.staticflickr.com/3929/15391622816_6e1b496075_t.jpg' /></a></td><td class='data_cell'>[<a href='http://flickr.com/photos/99579729@N06' target='_blank'>preschang</a>] Add #Babson College this week as a member of the #Goldman Sachs 10k small business program. Learning how to be a better #business man!<br /><span class='time'>2014-10-01 12:05:41</span></td></tr></table>"},
-     "flickr"
-     );
-  */
-
+  function init() {
     MAP.createMap({{ location.latitude }},
                   {{ location.longitude }},
                   {{ location.radius }},
                   window.cleanData
                  ); // creates the map
     TIMELINE.createTimeline(window.cleanData); // creates the d3.js timeline
-}
+  }
 
-google.maps.event.addDomListener(window, 'load', init);
+  google.maps.event.addDomListener(window, 'load', init);
 
 </script>
 
