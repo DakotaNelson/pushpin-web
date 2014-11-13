@@ -55,10 +55,8 @@ var TIMELINE = {
 
     var dateFormat = d3.time.format("%Y-%m-%dT%H:%M:%SZ");
 
-    console.log(timelineData);
     timelineData.map(
       function(datum) {
-        console.log(datum.date);
         datum.date = dateFormat.parse(datum.date);
         return datum;
       });
