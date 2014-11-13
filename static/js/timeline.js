@@ -13,7 +13,13 @@ var TIMELINE = {
   createTimeline: function(data) {
     if (TIMELINE.active == null) {
       // if the list of active sources hasn't been initialized, do so
-      TIMELINE.active = d3.values(_.pluck(data, 'source'));
+      var temp = d3.values(_.pluck(data, 'source'));
+      TIMELINE.active = [];
+      temp.forEach( function(str) {
+        if(TIMELINE.active.indexOf(str) == -1) {
+          TIMELINE.active.push(str);
+        }
+      });
       TIMELINE.active.push('total');
     }
 
@@ -62,7 +68,6 @@ var TIMELINE = {
       });
     // format all of the dates as date objects instead of strings and remove anything older than 5 years
 
-    console.log(timelineData);
     timelineData.filter(
       function(datum) {
         if(new Date().getFullYear() - datum.date.getFullYear() < 5) {
@@ -72,9 +77,6 @@ var TIMELINE = {
     });
     // filter out any pins older than 4ish years
 
-    //var weird = allData.filter(function(item) { if(item.getFullYear() < 1995) { return true; } return false; });
-    //console.log(weird);
-
     TIMELINE.minTime = d3.min(timelineData,
         function(d) { return d.date;}).getTime();
     TIMELINE.maxTime = d3.max(timelineData,
@@ -83,15 +85,15 @@ var TIMELINE = {
     TIMELINE.binSize = (TIMELINE.maxTime - TIMELINE.minTime) / TIMELINE.numBins;
 
     // create data that's grouped by source
-    var sourceData = _.groupBy(timelineData,
+    /*var sourceData = _.groupBy(timelineData,
         function(datum){ return datum.source; }
         );
 
-    console.log(sourceData);
+    console.log(sourceData);*/
 
     // Initialize series structure.
     var series = {};
-    TIMELINE.active.map(function(key) {
+    TIMELINE.active.forEach(function(key) {
       series[key] = [];
     });
 
@@ -103,19 +105,17 @@ var TIMELINE = {
     }
 
     // Bin pins.
-    d3.entries(sourceData).forEach(function(entry) {
-      entry.value.map(function(pin) {
-        var source = entry.key;
-        var time = pin.date.getTime();
-        var bindex = Math.floor((time-TIMELINE.minTime)/TIMELINE.binSize); // the index of the bin this pin goes in (for great win)
+    timelineData.map(function(pin) {
+      var source = pin.source;
+      var time = pin.date.getTime();
+      var bindex = Math.floor((time-TIMELINE.minTime)/TIMELINE.binSize); // the index of the bin this pin goes in (for great win)
 
-        if (0 <= bindex && bindex <= TIMELINE.numBins) {
-          series['total'][bindex].count += 1;
-          if (TIMELINE.active.indexOf(source) != -1) {
-            series[source][bindex].count += 1;
-          }
+      if (0 <= bindex && bindex <= TIMELINE.numBins) {
+        series['total'][bindex].count += 1;
+        if (TIMELINE.active.indexOf(source) != -1) {
+          series[source][bindex].count += 1;
         }
-      });
+      }
     });
 
     // Add empty first and last bins to each series -> line needs to start and end on x axis so fills work
