@@ -157,13 +157,13 @@ input[type=checkbox] {
           <td> Location Name </td>
           <td> Lat </td>
           <td> Lon </td>
-          <td> Radius (km) </td>
+          <td> Radius</td>
           <td> Created </td>
         </thead>
         <tbody>
         {% for loc in locations %}
         <tr onclick="document.location = '{% url 'map location' loc.name %}'">
-            <td> {{ loc.name|truncatechars:20 }} </td>
+            <td> {{ loc.name|truncatechars:15 }} </td>
             <td> {{ loc.latitude }} </td>
             <td> {{ loc.longitude }} </td>
             <td> {{ loc.radius }} </td>
