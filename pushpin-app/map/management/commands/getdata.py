@@ -1,6 +1,6 @@
 from django.core.management.base import NoArgsCommand, CommandError
 from map.models import Pushpin, Location
-from modules import flickr
+from modules import flickr, twitter
 
 class Command(NoArgsCommand):
     # TODO: enable specifying locations to pull as arguments
@@ -8,7 +8,11 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         locations = list(Location.objects.order_by('-date'))
 
-        fl = flickr.Flickr()
+        #fl = flickr.Flickr()
+        tw = twitter.Twitter()
 
         for location in locations:
-            fl.run(1,1,1)
+            print('')
+            print("Collecting data for: " + location.name)
+            #fl.run(location.name,location.latitude,location.longitude,location.radius)
+            tw.run(location.name,location.latitude,location.longitude,location.radius)

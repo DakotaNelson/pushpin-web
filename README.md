@@ -10,6 +10,7 @@ Good instructions on usage coming soon.
  * postgreSQL >= 9.2.8
  * psycopg2 >= 2.5.4
  * requests >= 2.1.0
+ * pytz >= 2014.9
 
 ### Rough notes on local usage:
 

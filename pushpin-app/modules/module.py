@@ -1,8 +1,11 @@
-from map.models import Keys
+from map.models import Keys, Pushpin, Location
 from django.core.exceptions import ValidationError
 import requests
+from urllib.parse import parse_qs
 import json
 import re
+import pytz
+from datetime import datetime
 
 class ModuleException(Exception):
     pass
@@ -37,7 +40,7 @@ class Module:
         # TODO: return only a user's keys (for multi-user use)
         keys = Keys.objects.get(user__username='test')
         setattr(keys, name, key)
-        try: keys.clean()
+        try: keys.full_clean()
         except ValidationError:
             raise ModuleException("Attempted to insert invalid key: " + name)
         keys.save()
@@ -117,8 +120,64 @@ class Module:
                     raise ModuleException(jsonobj[item])
             results += jsonobj['statuses']
             if 'next_results' in jsonobj['search_metadata']:
-                max_id = urlparse.parse_qs(jsonobj['search_metadata']['next_results'][1:])['max_id'][0]
+                max_id = parse_qs(jsonobj['search_metadata']['next_results'][1:])['max_id'][0]
                 payload['max_id'] = max_id
                 continue
             break
         return results
+
+    #======================================================
+    # Database Methods
+    #======================================================
+
+    def createPin(self, source, screen_name, profile_name, profile_url, media_url, thumb_url, message, latitude, longitude, time):
+        ## NOTE: this doesn't actually create a pushpin object, merely a dict that's ready to take a location (which requires a db hit) and then be easily turned into one
+        if not type(time) is datetime:
+            raise ModuleError("Supplied time must be in datetime format.")
+
+        for (s,l) in Pushpin.SOURCES:
+            # switch the verbose source out for the shorter DB version
+            if l.lower() == source.lower():
+                shortSrc = s
+                break
+            else:
+                raise ModuleError("Invalid pushpin source: " + source)
+
+        data = dict(
+                source = shortSrc,
+                screen_name = screen_name,
+                profile_name = profile_name,
+                profile_url = profile_url,
+                media_url = media_url,
+                thumb_url = thumb_url,
+                message = message,
+                latitude = float(latitude),
+                longitude = float(longitude),
+                time = time
+                    )
+        return data
+
+    def addPins(self, locname, pins):
+        location = Location.objects.get(name=locname)
+
+        prep = [] # the Pushpin objects will go here
+        for pin in pins:
+            # add the location reference to each pin, then create the object
+            if pin['time'].tzinfo is None:
+                pin['time'] = pytz.utc.localize(pin['time'])
+                # TODO: smarter localization based on coordinates
+
+            prep.append(Pushpin(source = pin['source'],
+                                date = pin['time'],
+                                screen_name = pin['screen_name'],
+                                profile_name = pin['profile_name'],
+                                profile_url = pin['profile_url'],
+                                media_url = pin['media_url'],
+                                thumb_url = pin['thumb_url'],
+                                message = pin['message'],
+                                latitude = pin['latitude'],
+                                longitude = pin['longitude'],
+                                location = location
+                               ))
+
+        Pushpin.objects.bulk_create(prep)
