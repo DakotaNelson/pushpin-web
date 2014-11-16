@@ -56,6 +56,7 @@ class Keys(models.Model):
     shodan_api = models.CharField(max_length = 50, blank=True)
     twitter_api = models.CharField(max_length = 50, blank=True)
     twitter_secret = models.CharField(max_length = 50, blank=True)
+    twitter_token = models.CharField(max_length = 50, blank=True)
     linkedin_api = models.CharField(max_length = 50, blank=True)
     linkedin_secret = models.CharField(max_length = 50, blank=True)
     facebook_api = models.CharField(max_length = 50, blank=True)
