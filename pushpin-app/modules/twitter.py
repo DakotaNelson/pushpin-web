@@ -1,5 +1,4 @@
 from modules import module
-
 from datetime import datetime
 
 class Twitter(module.Module):
