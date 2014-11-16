@@ -50,19 +50,19 @@ class Pushpin(models.Model):
         return "pin by " + self.screen_name + " from " + self.source
 
 class Keys(models.Model):
-    # hold's a user's API keys
-    flickr_api = models.CharField(max_length = 50, blank=True)
-    google_api = models.CharField(max_length = 50, blank=True)
-    shodan_api = models.CharField(max_length = 50, blank=True)
-    twitter_api = models.CharField(max_length = 50, blank=True)
-    twitter_secret = models.CharField(max_length = 50, blank=True)
-    twitter_token = models.CharField(max_length = 50, blank=True)
-    linkedin_api = models.CharField(max_length = 50, blank=True)
-    linkedin_secret = models.CharField(max_length = 50, blank=True)
-    facebook_api = models.CharField(max_length = 50, blank=True)
-    facebook_secret = models.CharField(max_length = 50, blank=True)
-    facebook_username = models.CharField(max_length = 50, blank=True)
-    facebook_password = models.CharField(max_length = 50, blank=True)
+    # holds a user's API keys
+    flickr_api = models.CharField(max_length = 50, blank=True, null=True)
+    google_api = models.CharField(max_length = 50, blank=True, null=True)
+    shodan_api = models.CharField(max_length = 50, blank=True, null=True)
+    twitter_api = models.CharField(max_length = 50, blank=True, null=True)
+    twitter_secret = models.CharField(max_length = 50, blank=True, null=True)
+    twitter_token = models.CharField(max_length = 200, blank=True, null=True)
+    linkedin_api = models.CharField(max_length = 50, blank=True, null=True)
+    linkedin_secret = models.CharField(max_length = 50, blank=True, null=True)
+    facebook_api = models.CharField(max_length = 50, blank=True, null=True)
+    facebook_secret = models.CharField(max_length = 50, blank=True, null=True)
+    facebook_username = models.CharField(max_length = 50, blank=True, null=True)
+    facebook_password = models.CharField(max_length = 50, blank=True, null=True)
     user = models.OneToOneField(User, primary_key=True)
 
     def __str__(self):

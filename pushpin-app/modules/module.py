@@ -1,4 +1,5 @@
 from map.models import Keys
+from django.core.exceptions import ValidationError
 import requests
 import json
 import re
@@ -33,7 +34,13 @@ class Module:
             raise ModuleException("Key: " + name + " is not in database.")
 
     def addKey(self, name, key):
-        print("Adding " + name + " to database.")
+        # TODO: return only a user's keys (for multi-user use)
+        keys = Keys.objects.get(user__username='test')
+        setattr(keys, name, key)
+        try: keys.clean()
+        except ValidationError:
+            raise ModuleException("Attempted to insert invalid key: " + name)
+        keys.save()
         return
 
     #======================================================
