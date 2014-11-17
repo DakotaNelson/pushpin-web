@@ -175,12 +175,12 @@ var TIMELINE = {
                       .tickSize(-width)
                       .tickFormat(d3.format("d"));
 
-    var all_styles = {'Flickr':{color: '#FF9900', width: '1px', fillOpacity: '0.2'},
-                      'Picasa':{ color: '#7E55FC', width: '1px', fillOpacity: '0.2'},
-                      'Shodan':{ color: '#FCF357', width: '1px', fillOpacity: '0.2'},
-                      'Twitter':{ color: '#5781FC', width: '1px', fillOpacity: '0.2'},
-                      'Youtube':{ color: '#FC6355', width: '1px', fillOpacity: '0.2'},
-                      'total':{ color: 'Black', width: '1px', fillOpacity: '0.2'}};
+    var all_styles = {'Flickr':{color: '#FF9900'},
+                      'Picasa':{ color: '#7E55FC'},
+                      'Shodan':{ color: '#FCF357'},
+                      'Twitter':{ color: '#5781FC'},
+                      'Youtube':{ color: '#FC6355'},
+                      'total':{ color: 'Black'}};
 
     var active_styles = TIMELINE.active.map( function(item) { return all_styles[item];  } );
 
@@ -208,9 +208,9 @@ var TIMELINE = {
           .attr("class","line")
           .attr("d", function(d) { return line(d.values); })
           .style("stroke", function (d) { return style(d.label).color; })
-          .style('stroke-width', function (d) { return style(d.label).width; })
+          //.style('stroke-width', function (d) { return style(d.label).width; })
           .style('fill', function (d) { return style(d.label).color; })
-          .style('fill-opacity', function (d) { return style(d.label).fillOpacity; });
+          //.style('fill-opacity', function (d) { return style(d.label).fillOpacity; });
 
     svg.append("g")
        .attr("class", "x axis")

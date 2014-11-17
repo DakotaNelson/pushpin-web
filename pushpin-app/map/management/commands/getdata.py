@@ -9,16 +9,16 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         locations = list(Location.objects.order_by('-date'))
 
-        #fl = flickr.Flickr()
-        tw = twitter.Twitter()
-        yu = youtube.Youtube()
+        modules = []
+        #modules.append(flickr.Flickr())
+        modules.append(twitter.Twitter())
+        modules.append(youtube.Youtube())
 
         for location in locations:
             print('')
             print("Collecting data for: " + location.name)
-            #fl.run(location.name,location.latitude,location.longitude,location.radius)
-            tw.run(location.name,location.latitude,location.longitude,location.radius)
-            yu.run(location.name,location.latitude,location.longitude,location.radius)
+            for module in modules:
+                module.run(location.name,location.latitude,location.longitude,location.radius)
 
         unique_fields = ['location', 'latitude', 'longitude', 'date', 'screen_name']
         # if two things are in the same location bin, at the same latitude and

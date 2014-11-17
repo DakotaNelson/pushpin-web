@@ -28,6 +28,9 @@ Good instructions on usage coming soon.
 * Set `DEBUG` (in settings.py) to False.
 * Change `ALLOWED_HOSTS` (you can probably guess where that is by now) to the valid host/domain names.
 
+### Once it's set up:
+ * run `python manage.py getdata` to pull data and populate the database. This could be done with cron.
+
 ### Other notes:
 
 * If you'd like to host your own static files, change `STATIC_URL` in settings.py to point to your custom location.
