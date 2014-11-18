@@ -70,28 +70,30 @@ google.maps.event.addDomListener(window, 'load', init);
       <a href="#new-location" rel="facebox">
         <center>Create New Location</center>
       </a>
-      <table>
-        <thead>
-        <tr>
-          <td> Location Name </td>
-          <td> Lat </td>
-          <td> Lon </td>
-          <td> Radius</td>
-          <td> Created </td>
-        </tr>
-        </thead>
-        <tbody>
-        {% for loc in locations %}
-        <tr onclick="document.location = '{% url 'map:map location' loc.name %}'">
-            <td> {{ loc.name|truncatechars:35 }} </td>
-            <td> {{ loc.latitude }} </td>
-            <td> {{ loc.longitude }} </td>
-            <td> {{ loc.radius }} </td>
-            <td> {{ loc.date|date:"m/d/y" }} </td>
+      <div id="locations-inner">
+        <table>
+          <thead>
+          <tr>
+            <td> Location Name </td>
+            <td> Lat </td>
+            <td> Lon </td>
+            <td> Radius</td>
+            <td> Created </td>
           </tr>
-        </tbody>
-        {% endfor %}
-      </table>
+          </thead>
+          <tbody>
+          {% for loc in locations %}
+            <tr onclick="document.location='{% url 'map:map location' loc.name %}'">
+              <td> {{ loc.name|truncatechars:35 }} </td>
+              <td> {{ loc.latitude }} </td>
+              <td> {{ loc.longitude }} </td>
+              <td> {{ loc.radius }} </td>
+              <td> {{ loc.date|date:"m/d/y" }} </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
     <div id="timeline"></div>
     <div class="overlay" id="new-location">

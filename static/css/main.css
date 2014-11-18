@@ -42,16 +42,23 @@ td {
 }
 #locations {
   float: left;
-  overflow: hidden;
   display: inline-block;
+  overflow: hidden;
   width: 30%;
   height:20%;
+}
+#locations-inner {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 #locations table {
   color: black;
   width: 100%;
   margin-top: 3px;
   margin-left: 3px;
+  margin-right: 6px;
   font: 12px sans-serif;
   border-collapse: collapse;
   text-align: center;
@@ -61,7 +68,7 @@ td {
   background-color: #a8a8a8;
   cursor: default;
 }
-#locations table tbody:hover {
+#locations table tbody tr:hover {
   cursor: pointer;
   background-color: lightgrey;
 }

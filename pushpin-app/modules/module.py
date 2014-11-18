@@ -5,6 +5,7 @@ from urllib.parse import parse_qs
 import json
 import re
 import pytz
+import time
 from datetime import datetime
 
 class ModuleException(Exception):
@@ -122,6 +123,8 @@ class Module:
             if 'next_results' in jsonobj['search_metadata']:
                 max_id = parse_qs(jsonobj['search_metadata']['next_results'][1:])['max_id'][0]
                 payload['max_id'] = max_id
+                time.sleep(2) # don't hit the rate limit
+                # TODO: make this more intelligent about using the full limit
                 continue
             break
         return results
@@ -184,3 +187,41 @@ class Module:
                                ))
 
         Pushpin.objects.bulk_create(prep)
+
+
+        unique_fields = ['location', 'latitude', 'longitude', 'date', 'screen_name']
+        # if two things are in the same location bin, at the same latitude and
+        # longitude, created at the same date by the same person, they are
+        # assumed to be the same thing
+
+        # now de-dupe the database
+        #print('')
+        #print("Removing duplicates in database...")
+        duplicates = (Pushpin.objects.values(*unique_fields)
+                                     .order_by()
+                                     .annotate(max_id=models.Max('id'),
+                                               count_id=models.Count('id'))
+                                     .filter(count_id__gt=1))
+
+        for duplicate in duplicates:
+            (Pushpin.objects.filter(**{x: duplicate[x] for x in unique_fields})
+                            .exclude(id=duplicate['max_id'])
+                            .delete())
+
+        """
+            Discussion time:
+            This is pretty slow. However, the alternative is setting a
+            unique constraint on pushpins, then inserting pins one at a time
+            to the database... which is also really slow, and additionally
+            requires some sort of external unique ID. (Twitter has this, but
+            it may be difficult to get that from every API.) Enforcing
+            uniqueness on insert instead of inserting blindly and cleaning
+            later is a better option, but this works for now.
+
+            Additionally, if the user happens to refresh the page in between
+            the pins being added and the de-duping happening, they
+            may see twice as many objects as usual, which would be bad.
+
+            See:
+        https://stackoverflow.com/questions/15261821/django-unique-bulk-inserts
+        """
