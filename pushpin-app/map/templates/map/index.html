@@ -82,8 +82,8 @@ google.maps.event.addDomListener(window, 'load', init);
         </thead>
         <tbody>
         {% for loc in locations %}
-        <tr onclick="document.location = '{% url 'map location' loc.name %}'">
-            <td> {{ loc.name|truncatechars:15 }} </td>
+        <tr onclick="document.location = '{% url 'map:map location' loc.name %}'">
+            <td> {{ loc.name|truncatechars:35 }} </td>
             <td> {{ loc.latitude }} </td>
             <td> {{ loc.longitude }} </td>
             <td> {{ loc.radius }} </td>
@@ -95,8 +95,13 @@ google.maps.event.addDomListener(window, 'load', init);
     </div>
     <div id="timeline"></div>
     <div class="overlay" id="new-location">
-      <form id="new-location-form">
-        This is where users will add new locations.
+      <center><h1>Track a New Location</h1></center>
+      <form class="new-location-form" action="{% url 'map:track new location' %}" method="POST" onsubmit="newLocationSubmit();">
+        {% csrf_token %}
+        <center><table>
+          {{ locationForm.as_table }}
+        </table></center>
+        <center><input type="submit" value="Add" /></center>
       </form>
     </div>
 </body>

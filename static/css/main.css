@@ -20,7 +20,7 @@ td {
 }
 #timeline {
   display: inline-block;
-  width: 80%;
+  width: 70%;
   height: 20%;
   font: 12px sans-serif;
 }
@@ -44,7 +44,7 @@ td {
   float: left;
   overflow: hidden;
   display: inline-block;
-  width: 20%;
+  width: 30%;
   height:20%;
 }
 #locations table {

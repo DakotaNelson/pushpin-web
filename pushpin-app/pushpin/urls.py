@@ -7,7 +7,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'pushpin.views.home', name='home'),
     # url(r'^pushpin/', include('pushpin.foo.urls')),
-    url(r'^map/', include('map.urls')),
+    url(r'^map/', include('map.urls', namespace="map")),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
