@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.forms import ModelForm
+from map.tasks import youtubeTask, twitterTask
 from datetime import datetime
 import json
 
@@ -31,8 +32,6 @@ def mapLocation(request, locName):
             sources.append(pin.source)
 
     # NOTE: this will change if the class is changed in map/forms.py
-    # HOWEVER: it still has JS on the frontend to validate and send data,
-    # which also needs to be change if changes are made there
     locationForm = LocationForm()
 
     context = {
@@ -52,7 +51,9 @@ def addLocation(request):
         print("ERROR: addLocation endpoint was sent a " + request.method + " request. Requires POST.")
         return HttpResponseForbidden("only POST requests allowed")
     else:
+        # fill the form template with the incoming data
         form = LocationForm(request.POST)
+        # save the form, but wait to let us make some changes
         location = form.save(commit=False)
         location.date = datetime.now()
         location.latest_data = datetime.now()
@@ -60,10 +61,16 @@ def addLocation(request):
         location.user = User.objects.get(username='test')
 
         if form.is_valid():
+            # add the new location
             location.save()
             response_data['result'] = 'success'
             response_data['message'] = 'Location was successfully added.'
+
+            # run all modules to get data for this new location
+            twitterTask.delay()
+            youtubeTask.delay()
         else:
+            # form is not valid
             response_data['result'] = 'failed'
             response_data['message'] = 'Data is invalid.'
 

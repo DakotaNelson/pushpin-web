@@ -1,0 +1,5 @@
+Django==1.7.1
+django-celery==3.1.16
+psycopg2==2.5.4
+pytz==2014.9
+requests==2.1.0

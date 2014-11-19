@@ -106,5 +106,26 @@ google.maps.event.addDomListener(window, 'load', init);
         <center><input type="submit" value="Add" /></center>
       </form>
     </div>
+
+    <script type="text/template" id="pushpinTemplate">
+      <div>
+        <table>
+          <tr>
+            <td class='prof_cell'>
+              <a href='<%- profile_url %>' target='_blank'>
+                <img class='prof_img rounded' src='<%- thumb_url %>' />
+              </a>
+            </td>
+            <td class='data_cell'>
+              [<a href='<%- media_url %>' target='_blank'><%- screen_name %></a>] <%- profile_name %>
+              <br/>
+              <%- message %>
+              <br/>
+              <span class='time'><%- date %></span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </script>
 </body>
 </html>

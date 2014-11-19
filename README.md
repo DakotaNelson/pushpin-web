@@ -5,20 +5,14 @@ Good instructions on usage coming soon.
 
 ### Quick (and incomplete) list of dependencies:
 
-##### Pip: (soon to be a requirements.txt)
- * django >= 1.7.1
- * python >= 3.3.3
- * postgreSQL >= 9.2.8
- * psycopg2 >= 2.5.4
- * requests >= 2.1.0
- * pytz >= 2014.9
- * django-celery >= 3.1.16
-
 ##### Packages:
+ * python >= 3.3.3
  * RabbitMQ: `apt-get install rabbitmq` or `yum install rabbitmq-server`
+ * postgreSQL >= 9.2.8
 
 ### Rough notes on local usage:
 
+* `pip install -r requirements.txt`
 * In `pushpin-web/static`, run `python -m http.server 8001`. This is to serve static files, because doing so with Django will make you feel many terrible feels.
 * Create a symlink in `pushpin-web/static` that points to `your-django-path/django/contrib/admin/static/admin` so that your new server will also serve the static files for Django's admin interface.
 * Run `postmaster -D ./db/` to start the PostgreSQL server, where `./db/` is a directory you create to hold the database.
@@ -44,6 +38,7 @@ Good instructions on usage coming soon.
  * Create the actual module in `pushpin-app/modules`, using another model as a template
  * In `pushpin-app/map/tasks.py`, add a task for your module by copying another module and modifying it
  * In `pushpin-app/map/management/commands/getdata.py`, add your task to the list that needs to be run
+ * In `pushpin-app/map/views.py`, add your task to the list of tasks that is run after a new location is added in the addLocation view.
  * Restart celery and celery beat
 
 ### Other notes:

@@ -78,9 +78,19 @@ var MAP = {
       }
     );
 
+    // get template from the page, and load it in to the underscore.js template function
+    var pinTemplate = _.template($('#pushpinTemplate').html());
     MAP.data.forEach(function(pin) {
-      MAP.addMarker({position: new google.maps.LatLng(pin.latitude, pin.longitude) , title: pin.screen_name, icon: MAP.icon[pin.source] , map:MAP.map}, {details: pin.message}, pin.source);
-      // TODO fill out details in to HTML template
+      MAP.addMarker({
+          position: new google.maps.LatLng(pin.latitude, pin.longitude),
+          title: pin.screen_name, icon: MAP.icon[pin.source] ,
+          map:MAP.map
+        },
+        {
+          details: pinTemplate(pin)
+        },
+        pin.source
+      );
     });
     MAP.showMarkers('Twitter');
 
