@@ -125,10 +125,19 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    'djcelery',
     'map'
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+
+# url for Celery's broker (RabbitMQ)
+BROKER_URL = 'amqp://guest:guest@localhost:5672'
+
+CELERY_TASK_SERIALIZER='json'
+#CELERY_RESULT_SERIALIZER='json'
+#CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+CELERY_ACCEPT_CONTENT = ['json']
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

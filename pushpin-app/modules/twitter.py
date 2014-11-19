@@ -15,7 +15,7 @@ class Twitter(module.Module):
         # self.heading(point, level=0)
         self.output('Collecting data from Twitter...')
         point = str(lat) + "," + str(lon)
-        results = self.search_twitter_api({'q':'', 'geocode': '%s,%dkm' % (point, rad)})
+        results = self.search_twitter_api({'q':'', 'geocode': '%s,%dkm' % (point, rad), 'count': '100'})
 
         for tweet in results:
             if not tweet['geo']:
