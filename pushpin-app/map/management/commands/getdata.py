@@ -1,5 +1,4 @@
 from django.core.management.base import NoArgsCommand, CommandError
-from django.db import models
 from map.models import Pushpin, Location
 from modules import flickr, twitter, youtube
 

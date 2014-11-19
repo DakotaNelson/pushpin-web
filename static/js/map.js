@@ -29,7 +29,7 @@ var MAP = {
     MAP.center = new google.maps.LatLng(MAP.lat,MAP.lon);
 
     var mapOptions = {
-        zoom: 15,
+        zoom: 14,
         center: MAP.center,
         disableDefaultUI: true,
         mapTypeControl: true,

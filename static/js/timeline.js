@@ -61,21 +61,21 @@ var TIMELINE = {
 
     var dateFormat = d3.time.format("%Y-%m-%dT%H:%M:%SZ");
 
-    timelineData.map(
+    timelineData = timelineData.map(
       function(datum) {
         datum.date = dateFormat.parse(datum.date);
         return datum;
       });
     // format all of the dates as date objects instead of strings and remove anything older than 5 years
 
-    timelineData.filter(
+    // filter out any pins older than about a year
+    timelineData = timelineData.filter(
       function(datum) {
-        if(new Date().getFullYear() - datum.date.getFullYear() < 5) {
+        if(new Date().getFullYear() - datum.date.getFullYear() < 1) {
           return true;
         }
         return false;
     });
-    // filter out any pins older than 4ish years
 
     TIMELINE.minTime = d3.min(timelineData,
         function(d) { return d.date;}).getTime();

@@ -1,5 +1,6 @@
 from map.models import Keys, Pushpin, Location
 from django.core.exceptions import ValidationError
+from django.db import models
 import requests
 from urllib.parse import parse_qs
 import json
@@ -186,8 +187,8 @@ class Module:
                                 location = location
                                ))
 
+        # actually add the pins to the db
         Pushpin.objects.bulk_create(prep)
-
 
         unique_fields = ['location', 'latitude', 'longitude', 'date', 'screen_name']
         # if two things are in the same location bin, at the same latitude and
