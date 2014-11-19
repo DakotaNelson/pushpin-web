@@ -62,9 +62,9 @@ def addLocation(request):
         if form.is_valid():
             location.save()
             response_data['result'] = 'success'
-            response_data['message'] = 'location successfully added'
+            response_data['message'] = 'Location was successfully added.'
         else:
             response_data['result'] = 'failed'
-            response_data['message'] = 'data is invalid'
+            response_data['message'] = 'Data is invalid.'
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")

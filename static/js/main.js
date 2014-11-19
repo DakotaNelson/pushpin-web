@@ -18,11 +18,11 @@ function newLocationSubmit(e) {
 }
 
 function newLocationSuccess(d) {
-  console.log(d);
-  console.log("VICTORY!");
+  var message = "Success! " + d.message;
+  $("#facebox .content").append(message);
 }
 
 function newLocationFail(d) {
-  console.log(d);
-  console.log("FAILURE.");
+  var message = "Failure. " + d.message;
+  $("#facebox .content").append(message);
 }
