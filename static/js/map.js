@@ -92,8 +92,7 @@ var MAP = {
         pin.source
       );
     });
-    MAP.showMarkers('Twitter');
-
+    // TODO linkify the messages (jQuery linkify already included)
   },
 
   addMarker: function(opts, place, source) {
