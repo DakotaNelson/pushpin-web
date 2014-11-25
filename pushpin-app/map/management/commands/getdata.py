@@ -1,6 +1,6 @@
 from django.core.management.base import NoArgsCommand, CommandError
 
-from map.tasks import youtubeTask, twitterTask, picasaTask
+from map.tasks import youtubeTask, twitterTask, picasaTask, shodanTask
 
 class Command(NoArgsCommand):
     # TODO: enable specifying locations to pull as arguments
@@ -9,3 +9,4 @@ class Command(NoArgsCommand):
         twitterTask.delay()
         youtubeTask.delay()
         picasaTask.delay()
+        shodanTask.delay()

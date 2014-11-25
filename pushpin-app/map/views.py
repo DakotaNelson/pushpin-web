@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.core import serializers
 from django.forms import ModelForm
 from django.core.exceptions import ObjectDoesNotExist
-from map.tasks import youtubeTask, twitterTask
+from map.tasks import youtubeTask, twitterTask, picasaTask, shodanTask
 from datetime import datetime
 import json
 
@@ -71,6 +71,7 @@ def addLocation(request):
             twitterTask.delay()
             youtubeTask.delay()
             picasaTask.delay()
+            shodanTask.delay()
         else:
             # form is not valid
             response_data['result'] = 'failed'

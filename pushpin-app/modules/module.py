@@ -88,7 +88,7 @@ class Module:
             return None
 
     #======================================================
-    # Request Methods
+    # External API Methods
     #======================================================
 
     def get_twitter_oauth_token(self):
@@ -128,6 +128,34 @@ class Module:
                 # TODO: make this more intelligent about using the full limit
                 continue
             break
+        return results
+
+    def search_shodan_api(self, query, limit=0):
+        api_key = self.getKey('shodan_api')
+        url = 'https://api.shodan.io/shodan/host/search'
+        payload = {'query': query, 'key': api_key}
+        results = []
+        cnt = 1
+        page = 1
+        #self.verbose('Searching Shodan API for: %s' % (query))
+        while True:
+            resp = self.request(url, content=payload)
+            json = resp.json()
+            if json == None:
+                raise ModuleException('Invalid JSON response.\n%s' % (resp.text))
+            if 'error' in json:
+                raise ModuleException(json['error'])
+            if not json['matches']:
+                break
+            # add new results
+            results.extend(json['matches'])
+            # check limit
+            if limit == cnt:
+                break
+            cnt += 1
+            # next page
+            page += 1
+            payload['page'] = page
         return results
 
     #======================================================
