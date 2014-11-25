@@ -3,7 +3,7 @@ from celery.task import periodic_task
 from celery import shared_task
 from datetime import timedelta
 
-from modules import flickr, twitter, youtube
+from modules import flickr, twitter, youtube, picasa
 from map.models import Pushpin, Location
 
 """@shared_task
@@ -41,6 +41,17 @@ def youtubeTask():
     locations = list(Location.objects.order_by('-date'))
 
     module = youtube.Youtube()
+
+    for location in locations:
+        module.run(location.name,location.latitude,location.longitude,location.radius)
+    return
+
+@shared_task
+@periodic_task(run_every=crontab(minute=10,hour="*/1"))
+def picasaTask():
+    locations = list(Location.objects.order_by('-date'))
+
+    module = picasa.Picasa()
 
     for location in locations:
         module.run(location.name,location.latitude,location.longitude,location.radius)

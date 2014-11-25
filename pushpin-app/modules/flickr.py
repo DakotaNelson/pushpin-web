@@ -6,7 +6,7 @@ from map.models import Pushpin, Location
 
 class Flickr(module.Module):
     ''' adapted from recon-ng Flickr module
-        written by Tim Tomes (@LaNMaSteR5) '''
+        written by Tim Tomes (@LaNMaSteR53) '''
 
     def __init__(self):
         return

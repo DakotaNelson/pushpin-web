@@ -70,6 +70,7 @@ def addLocation(request):
             # run all modules to get data for this new location
             twitterTask.delay()
             youtubeTask.delay()
+            picasaTask.delay()
         else:
             # form is not valid
             response_data['result'] = 'failed'

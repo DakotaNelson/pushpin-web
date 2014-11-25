@@ -3,7 +3,7 @@ from datetime import datetime
 
 class Youtube(module.Module):
     ''' adapted from recon-ng Twitter module
-        written by Tim Tomes (@LaNMaSteR5) '''
+        written by Tim Tomes (@LaNMaSteR53) '''
 
     def __init__(self):
         return

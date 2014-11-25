@@ -3,7 +3,7 @@ from datetime import datetime
 
 class Twitter(module.Module):
     ''' adapted from recon-ng Twitter module
-        written by Tim Tomes (@LaNMaSteR5) '''
+        written by Tim Tomes (@LaNMaSteR53) '''
 
     def __init__(self):
         return
@@ -12,7 +12,6 @@ class Twitter(module.Module):
         url = 'https://api.twitter.com/1.1/search/tweets.json'
         count = 0
         pins = []
-        # self.heading(point, level=0)
         self.output('Collecting data from Twitter...')
         point = str(lat) + "," + str(lon)
         results = self.search_twitter_api({'q':'', 'geocode': '%s,%dkm' % (point, rad), 'count': '100'})
