@@ -16,7 +16,7 @@ Good instructions on usage coming soon.
 * In `pushpin-web/static`, run `python -m http.server 8001`. This is to serve static files, because doing so with Django will make you feel many terrible feels.
 * Create a symlink in `pushpin-web/static` that points to `your-django-path/django/contrib/admin/static/admin` so that your new server will also serve the static files for Django's admin interface.
 * Run `postmaster -D ./db/` to start the PostgreSQL server, where `./db/` is a directory you create to hold the database.
-* Run `sudo rabbitmq-server` (with an optional `-detched`) to run the RabbitMQ message queue
+* Run `sudo rabbitmq-server` (with an optional `-detached`) to run the RabbitMQ message queue
 * cd to `pushpin-web/pushpin-app` and run `python manage.py migrate` to set up the database
 * Run `python manage.py runserver` to start the django server
 * Run `python manage.py celery worker --loglevel=info --concurrency=1` to start the celery server
@@ -32,7 +32,7 @@ Good instructions on usage coming soon.
 * Change `ALLOWED_HOSTS` (you can probably guess where that is by now) to the valid host/domain names.
 
 ### Once it's set up:
- * run `python manage.py getdata` to pull data and populate the database. This could be done with cron.
+ * run `python manage.py getdata` to pull data and populate the database manually, otherwise it will be run by celery beat hourly. If you want data scraping to be manual only, don't run celery beat.
 
 ### To add a module:
  * Create the actual module in `pushpin-app/modules`, using another model as a template

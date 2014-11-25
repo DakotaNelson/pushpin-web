@@ -3,6 +3,7 @@ $(document).ready( function() {
   $.facebox.settings.closeImage = GLOBAL.faceboxCloseImage;
   $.facebox.settings.loadingImage = GLOBAL.faceboxLoadingImage;
   $('a[rel*=facebox]').facebox();
+  $('#delete-location').on('click', deleteLocation);
 });
 
 function newLocationSubmit(e) {
@@ -25,4 +26,44 @@ function newLocationSuccess(d) {
 function newLocationFail(d) {
   var message = "Failure. " + d.message;
   $("#facebox .content").append(message);
+}
+
+function deleteLocation(e) {
+  event.preventDefault();
+  var csrftoken = getCookie('csrftoken');
+
+  $.ajax({
+    url: './delete/',
+    headers: {"X-CSRFToken":csrftoken},
+    type: "POST",
+    data: {},
+    success: deleteLocationSuccess,
+    error: deleteLocationFail
+  });
+}
+
+function deleteLocationSuccess(d) {
+  $("#delete-location").html("Location Removed");
+  // remove the click handler
+  $("#delete-location").off();
+}
+
+function deleteLocationFail(d) {
+  console.log(d);
+}
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie != '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
 }

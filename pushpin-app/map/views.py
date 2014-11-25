@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.forms import ModelForm
+from django.core.exceptions import ObjectDoesNotExist
 from map.tasks import youtubeTask, twitterTask
 from datetime import datetime
 import json
@@ -74,4 +75,25 @@ def addLocation(request):
             response_data['result'] = 'failed'
             response_data['message'] = 'Data is invalid.'
 
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def deleteLocation(request, locName):
+    response_data = {}
+    if request.method != 'POST':
+        print("ERROR: deleteLocation endpoint was sent a " + request.method + " request. Requires POST.")
+        return HttpResponseForbidden("only POST requests allowed")
+    else:
+        # TODO: add multiple users
+        user = User.objects.get(username='test')
+        try:
+            location = Location.objects.get(name=locName, user__username=user.username)
+        except ObjectDoesNotExist:
+            response_data['result'] = 'failed'
+            response_data['message'] = 'Location name is invalid (location not found or user does not have permission).'
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        # the location exists, and the user has permission, so go ahead:
+        location.delete()
+
+    response_data['result'] = 'success'
+    response_data['message'] = 'Location was successfully deleted.'
     return HttpResponse(json.dumps(response_data), content_type="application/json")

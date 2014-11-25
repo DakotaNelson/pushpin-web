@@ -2,7 +2,7 @@
 {% load staticfiles %}
 <html>
 <head>
-<title>Pushpin - Map</title>
+<title>Pushpin | {{ location.name }}</title>
 <meta charset="UTF-8">
 
 <!-- js libs go here -->
@@ -67,10 +67,16 @@ google.maps.event.addDomListener(window, 'load', init);
     </div>
 
     <div class="map" id="map"></div>
+
     <div id="locations">
-      <a href="#new-location" rel="facebox">
-        <center>Add New Location</center>
-      </a>
+      <div id="location-controls">
+        <a href="#new-location" rel="facebox" class="horiz-item">
+          Add New Location
+        </a>
+        <a id="delete-location" href="#" class="horiz-item">
+          Delete Current Location
+        </a>
+      </div>
       <div id="locations-inner">
         <table>
           <thead>
@@ -96,7 +102,9 @@ google.maps.event.addDomListener(window, 'load', init);
         </table>
       </div>
     </div>
+
     <div id="timeline"></div>
+
     <div class="overlay" id="new-location">
       <center><h1>Track a New Location</h1></center>
       <form class="new-location-form" action="{% url 'map:track new location' %}" method="POST" onsubmit="newLocationSubmit();">
