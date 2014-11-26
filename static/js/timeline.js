@@ -16,6 +16,8 @@ var TIMELINE = {
       var temp = d3.values(_.pluck(data, 'source'));
       TIMELINE.active = [];
       temp.forEach( function(str) {
+        if(str == "Shodan") { return; }
+        // Shodan has no dates, and shouldn't be on the timeline
         if(TIMELINE.active.indexOf(str) == -1) {
           TIMELINE.active.push(str);
         }
@@ -33,13 +35,17 @@ var TIMELINE = {
   },
 
   clear: function() {
-    var container = document.getElementById(TIMELINE.elementId.substr(1));
+    /*var container = document.getElementById(TIMELINE.elementId.substr(1));
     while(container.firstChild) {
       container.removeChild(container.firstChild);
-    }
+    }*/
+    $(TIMELINE.elementId).empty();
   },
 
   addActive: function(source) {
+    if(source == "Shodan") {
+      return;
+    }
     if(TIMELINE.active.indexOf(source) == -1) {
       TIMELINE.active.push(source);
       TIMELINE.update();
@@ -71,6 +77,10 @@ var TIMELINE = {
     // filter out any pins older than about a year
     timelineData = timelineData.filter(
       function(datum) {
+        if(datum.source == "Shodan") {
+          // Shodan doesn't have dates; can't be on timeline without one
+          return false;
+        }
         if(new Date().getFullYear() - datum.date.getFullYear() < 1) {
           return true;
         }
@@ -177,7 +187,6 @@ var TIMELINE = {
 
     var all_styles = {'Flickr':{color: '#FF9900'},
                       'Picasa':{ color: '#7E55FC'},
-                      'Shodan':{ color: '#FCF357'},
                       'Twitter':{ color: '#5781FC'},
                       'Youtube':{ color: '#FC6355'},
                       'total':{ color: 'Black'}};
@@ -200,7 +209,7 @@ var TIMELINE = {
                      .interpolate("basis");
 
     var series = svg.selectAll(".series")
-                      .data(TIMELINE.data)
+                      .data(timelineData)
                     .enter().append("g")
                       .attr("class","series");
 
