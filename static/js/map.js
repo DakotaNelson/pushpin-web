@@ -15,10 +15,11 @@ var MAP = {
         },
   elementId: 'map',
 
-  createMap: function(lat,lon,radius,data) {
+  createMap: function(lat,lon,radius,zoom,data) {
     MAP.lat = lat;
     MAP.lon = lon;
     MAP.radius = radius;
+    MAP.zoom = zoom;
 
     MAP.data = data;
 
@@ -29,7 +30,7 @@ var MAP = {
     MAP.center = new google.maps.LatLng(MAP.lat,MAP.lon);
 
     var mapOptions = {
-        zoom: 14,
+        zoom: MAP.zoom,
         center: MAP.center,
         disableDefaultUI: true,
         mapTypeControl: true,

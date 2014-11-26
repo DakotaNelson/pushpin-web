@@ -1,0 +1,42 @@
+{% extends "map/index.html" %}
+{% load staticfiles %}
+
+{% block title %}
+Pushpin
+{% endblock %}
+
+{% block embedded_js %}
+<script type="text/javascript">
+var GLOBAL = {
+  faceboxCloseImage: '{% static "images/closelabel.png" %}',
+  faceboxLoadingImage: '{% static "images/loading.gif" %}',
+};
+
+function init() {
+  // this is called on load from main.js
+  MAP.createMap(39.8282, // center of the contiguous US
+                -98.5795,
+                0,
+                4, // zoom level 4
+                [] // no pushpins
+               ); // creates the map
+}
+
+google.maps.event.addDomListener(window, 'load', init);
+</script>
+{% endblock %}
+
+
+{% block nav %}{% endblock %}
+
+
+{% block timeline %}
+<div>
+  <center>
+    <br>
+    <br>
+    No location selected. Please select or add a location using the controls to the left.
+  </center>
+</div>
+{% endblock %}
+

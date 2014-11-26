@@ -45,6 +45,20 @@ def mapLocation(request, locName):
 
     return render(request, 'map/index.html', context)
 
+def noLocation(request):
+    # every available location
+    locations = list(Location.objects.all().order_by('-date'))
+
+    # NOTE: this will change if the class is changed in map/forms.py
+    locationForm = LocationForm()
+
+    context = {
+                'locations': locations,
+                'locationForm': locationForm
+              }
+
+    return render(request, 'map/noLocation.html', context)
+
 def addLocation(request):
     response_data = {}
 
@@ -52,6 +66,7 @@ def addLocation(request):
         print("ERROR: addLocation endpoint was sent a " + request.method + " request. Requires POST.")
         return HttpResponseForbidden("only POST requests allowed")
     else:
+        print("Adding location...")
         # fill the form template with the incoming data
         form = LocationForm(request.POST)
         # save the form, but wait to let us make some changes

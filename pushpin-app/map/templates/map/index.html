@@ -2,7 +2,11 @@
 {% load staticfiles %}
 <html>
 <head>
-<title>Pushpin | {{ location.name }}</title>
+<title>
+{% block title %}
+  Pushpin | {{ location.name }}
+{% endblock %}
+</title>
 <meta charset="UTF-8">
 
 <!-- js libs go here -->
@@ -17,10 +21,11 @@
 <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/facebox.css" %}" />
 
+{% block embedded_js %}
 <script type="text/javascript">
 
 // NOTE: this is only here so that it can be used with templating
-// TODO: use AJAX to get this data instead
+// TODO: use AJAX to get this data instead of this extreme jank
 var rawData = {{ pushpins|safe }};
 var cleanData = [];
 
@@ -31,7 +36,7 @@ var GLOBAL = {
 
 function init() {
   // this is called on load from main.js
-  // having this here is very hacky
+  // having this here is incredibly hacky
   rawData.forEach( function(datum) {
     cleanData.push(datum.fields);
     });
@@ -39,6 +44,7 @@ function init() {
   MAP.createMap({{ location.latitude }},
                 {{ location.longitude }},
                 {{ location.radius }},
+                14, // zoom level
                 window.cleanData
                ); // creates the map
 
@@ -48,6 +54,7 @@ function init() {
 google.maps.event.addDomListener(window, 'load', init);
 
 </script>
+{% endblock %}
 
 <!-- custom js goes here -->
 <script src="{% static "js/main.js" %}" charset="utf-8"></script>
@@ -57,6 +64,7 @@ google.maps.event.addDomListener(window, 'load', init);
 
 </head>
 <body>
+    {% block nav %}
     <div id="nav" class="nav rounded shaded">
         <div id="filter">
           {% for source in sources %}
@@ -65,9 +73,13 @@ google.maps.event.addDomListener(window, 'load', init);
         </div>
         <div id="summary"></div>
     </div>
+    {% endblock %}
 
+    {% block map %}
     <div class="map" id="map"></div>
+    {% endblock %}
 
+    {% block locations %}
     <div id="locations">
       <div id="location-controls">
         <a href="#new-location" rel="facebox" class="horiz-item">
@@ -102,8 +114,11 @@ google.maps.event.addDomListener(window, 'load', init);
         </table>
       </div>
     </div>
+    {% endblock %}
 
+    {% block timeline %}
     <div id="timeline"></div>
+    {% endblock %}
 
     <div class="overlay" id="new-location">
       <center><h1>Track a New Location</h1></center>
@@ -121,12 +136,12 @@ google.maps.event.addDomListener(window, 'load', init);
         <table>
           <tr>
             <td class='prof_cell'>
-              <a href='<%- profile_url %>' target='_blank'>
+              <a href='<%- media_url %>' target='_blank'>
                 <img class='prof_img rounded' src='<%- thumb_url %>' />
               </a>
             </td>
             <td class='data_cell'>
-              [<a href='<%- media_url %>' target='_blank'><%- screen_name %></a>] <%- profile_name %>
+              [<a href='<%- profile_url %>' target='_blank'><%- screen_name %></a>] <%- profile_name %>
               <br/>
               <%- message %>
               <br/>
