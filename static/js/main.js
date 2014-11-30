@@ -21,6 +21,7 @@ function newLocationSubmit(e) {
 function newLocationSuccess(d) {
   var message = "Success! " + d.message;
   $("#facebox .content").append(message);
+  $("#facebox .content").append("<br>It will take a minute or two to get data for this new location; it will appear on a refresh.");
 }
 
 function newLocationFail(d) {

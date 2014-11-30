@@ -1,7 +1,9 @@
 # Django settings for pushpin project.
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+from getenv import env
+
+DEBUG = env("DEBUG", "False")
+TEMPLATE_DEBUG = env("DEBUG", "False")
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -15,9 +17,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'pushpin',                      # Or path to database file if using sqlite3.
-        'USER': 'django',
-        'PASSWORD': 'djangotestpass',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'USER': env("POSTGRES_USER", "pushpin"),
+        'PASSWORD': env("POSTGRES_PASSWORD"),
+        'HOST': env("POSTGRES_HOST", "postgres"),
         'PORT': '',                      # Set to empty string for default.
     }
 }

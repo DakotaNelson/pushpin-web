@@ -3,11 +3,16 @@ Pushpin modules broken out of [recon-ng](https://bitbucket.org/LaNMaSteR53/recon
 
 Good instructions on usage coming soon.
 
+## Quickstart:
+Run `start.sh` to download a pre-built image from Docker hub and get started super fast. Visit localhost:8000 in your browser to see the results. *In production environments, open up start.sh and configure some unique passwords!*
+
+Run `build.sh` to build the docker image from source in case you want to make any changes. If there's a local copy of an image (i.e. one that you built), Docker (and by extension, `start.sh`) will use that instead.
+
 ### Quick (and incomplete) list of dependencies:
 
 ##### Packages:
  * python >= 3.3.3
- * RabbitMQ: `apt-get install rabbitmq` or `yum install rabbitmq-server`
+ * RabbitMQ: `apt-get install rabbitmq-server` or `yum install rabbitmq-server`
  * postgreSQL >= 9.2.8
 
 ### Rough notes on local usage:
@@ -19,7 +24,7 @@ Good instructions on usage coming soon.
 * Run `sudo rabbitmq-server` (with an optional `-detached`) to run the RabbitMQ message queue
 * cd to `pushpin-web/pushpin-app` and run `python manage.py migrate` to set up the database
 * Run `python manage.py runserver` to start the django server
-* Run `python manage.py celery worker --loglevel=info --concurrency=1` to start the celery server
+* Run `python manage.py celery worker --loglevel=info --concurrency=2` to start the celery server
 * Run `python manage.py celery beat` to run celery's scheduling engine
 * Before use, create a user named `test` (it MUST be called test, for now) by cd'ing to `pushpin-web/pushpin-app/` and running `python manage.py createsuperuser --username test`. It will then prompt you for an email, which is currently never used by the app but required nonetheless. This test user is currently the only implemented user in pushpin-web, and therefore must exist, yet is essentially unused. Full access control and multiple users are coming soon\*.
 
@@ -44,6 +49,14 @@ Good instructions on usage coming soon.
 ### Other notes:
 
 * If you'd like to host your own static files, change `STATIC_URL` in settings.py to point to your custom location.
+
+
+### Wishlist:
+[] Capable of handling multiple users/authentication.
+[] Make timeline on main page brushable to narrow displayed pins by date.
+[] Break down Celery tasks to the point of getting a single location's data from a single API, use a lock to make sure only one worker pulls from an API at a time.
+[] Use RabbitMQ as a backend to have Celery keep task status updated, show user progress of data-pulling tasks.
+[] Only pull data from APIs since the last update. (i.e. keep track of when run last and use that information)
 
 
 

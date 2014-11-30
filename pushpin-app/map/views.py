@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from django.core import serializers
 from django.forms import ModelForm
 from django.core.exceptions import ObjectDoesNotExist
@@ -12,6 +14,8 @@ from map.models import Pushpin, Location
 from map.forms import LocationForm
 
 
+@login_required
+@require_GET
 def mapLocation(request, locName):
     # the unique location
     location = get_object_or_404(Location, name=locName)
@@ -45,6 +49,8 @@ def mapLocation(request, locName):
 
     return render(request, 'map/index.html', context)
 
+@login_required
+@require_GET
 def noLocation(request):
     # every available location
     locations = list(Location.objects.all().order_by('-date'))
@@ -59,58 +65,87 @@ def noLocation(request):
 
     return render(request, 'map/noLocation.html', context)
 
+@login_required
+@require_GET
 def addLocation(request):
     response_data = {}
 
-    if request.method != 'POST':
-        print("ERROR: addLocation endpoint was sent a " + request.method + " request. Requires POST.")
-        return HttpResponseForbidden("only POST requests allowed")
+    print("Adding location...")
+    # fill the form template with the incoming data
+    form = LocationForm(request.POST)
+    # save the form, but wait to let us make some changes
+    location = form.save(commit=False)
+    location.date = datetime.now()
+    location.latest_data = datetime.now()
+    # TODO: add multiple users
+    location.user = User.objects.get(username='test')
+
+    if form.is_valid():
+        # add the new location
+        location.save()
+        response_data['result'] = 'success'
+        response_data['message'] = 'Location was successfully added.'
+
+        # run all modules to get data for this new location
+        twitterTask.delay()
+        youtubeTask.delay()
+        picasaTask.delay()
+        shodanTask.delay()
     else:
-        print("Adding location...")
-        # fill the form template with the incoming data
-        form = LocationForm(request.POST)
-        # save the form, but wait to let us make some changes
-        location = form.save(commit=False)
-        location.date = datetime.now()
-        location.latest_data = datetime.now()
-        # TODO: add multiple users
-        location.user = User.objects.get(username='test')
-
-        if form.is_valid():
-            # add the new location
-            location.save()
-            response_data['result'] = 'success'
-            response_data['message'] = 'Location was successfully added.'
-
-            # run all modules to get data for this new location
-            twitterTask.delay()
-            youtubeTask.delay()
-            picasaTask.delay()
-            shodanTask.delay()
-        else:
-            # form is not valid
-            response_data['result'] = 'failed'
-            response_data['message'] = 'Data is invalid.'
+        # form is not valid
+        response_data['result'] = 'failed'
+        response_data['message'] = 'Data is invalid.'
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+@login_required
+@require_POST
 def deleteLocation(request, locName):
     response_data = {}
-    if request.method != 'POST':
-        print("ERROR: deleteLocation endpoint was sent a " + request.method + " request. Requires POST.")
-        return HttpResponseForbidden("only POST requests allowed")
-    else:
-        # TODO: add multiple users
-        user = User.objects.get(username='test')
-        try:
-            location = Location.objects.get(name=locName, user__username=user.username)
-        except ObjectDoesNotExist:
-            response_data['result'] = 'failed'
-            response_data['message'] = 'Location name is invalid (location not found or user does not have permission).'
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
-        # the location exists, and the user has permission, so go ahead:
-        location.delete()
+    # TODO: add multiple users
+    user = User.objects.get(username='test')
+    try:
+        location = Location.objects.get(name=locName, user__username=user.username)
+    except ObjectDoesNotExist:
+        response_data['result'] = 'failed'
+        response_data['message'] = 'Location name is invalid (location not found or user does not have permission).'
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    # the location exists, and the user has permission, so go ahead:
+    location.delete()
 
     response_data['result'] = 'success'
     response_data['message'] = 'Location was successfully deleted.'
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@login_required
+@require_POST
+def getLocations(request):
+    response_data = {}
+
+    print("Adding location...")
+    # fill the form template with the incoming data
+    form = LocationForm(request.POST)
+    # save the form, but wait to let us make some changes
+    location = form.save(commit=False)
+    location.date = datetime.now()
+    location.latest_data = datetime.now()
+    # TODO: add multiple users
+    location.user = User.objects.get(username='test')
+
+    if form.is_valid():
+        # add the new location
+        location.save()
+        response_data['result'] = 'success'
+        response_data['message'] = 'Location was successfully added.'
+
+        # run all modules to get data for this new location
+        twitterTask.delay()
+        youtubeTask.delay()
+        picasaTask.delay()
+        shodanTask.delay()
+    else:
+        # form is not valid
+        response_data['result'] = 'failed'
+        response_data['message'] = 'Data is invalid.'
+
     return HttpResponse(json.dumps(response_data), content_type="application/json")
