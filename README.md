@@ -1,6 +1,7 @@
 Pushpin modules broken out of [recon-ng](https://bitbucket.org/LaNMaSteR53/recon-ng/) and turned into a webapp. Pushpin-web provides an easy web interface to keep track of geotagged social media activity. Deployed using Docker for ease of use.
 
 A project by [Black Hills Information Security](http://blackhillsinfosec.com)
+
 ![Black Hills Information Security](http://blackhillsinfosec.com/_images/BHIS-Logo.png "Black Hills Information Security")
 
 ## Quickstart:
