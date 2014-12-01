@@ -35,10 +35,15 @@ google.maps.event.addDomListener(window, 'load', init);
   <center>
     <br>
     <br>
-    No location selected. Please select or add a location using the controls to the left.
+    No location selected. Please select a location to the left or add a location using the link below.
     <br>
     <br>
     <b>Additionally, make sure you add API keys in the <a href="{% url 'admin:index' %}" target="_blank">management pages</a>.</b>
+    <br>
+    <br>
+    <a href="#new-location" rel="facebox" class="horiz-item">
+      Add New Location
+    </a>
   </center>
 </div>
 {% endblock %}
