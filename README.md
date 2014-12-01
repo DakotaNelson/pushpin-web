@@ -69,3 +69,4 @@ Data is pulled hourly by celerybeat and manually every time a new location is ad
 * Use RabbitMQ as a backend to have Celery keep task status updated, show user progress of data-pulling tasks.
 * Be able to manually trigger a data pull from the webapp. (Especially useful if for only one location.)
 * Only pull data from APIs since the last update. (i.e. keep track of when run last and use that information)
+* Linkify links in pushpins. The linkify library is already in place, it just needs to be used.
