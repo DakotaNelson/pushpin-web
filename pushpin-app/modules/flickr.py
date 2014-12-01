@@ -18,7 +18,7 @@ class Flickr(module.Module):
 
         url = 'https://api.flickr.com/services/rest/'
         count = 0
-        new = 0
+        pins = []
         #self.heading(point, level=0)
         payload = {'method': 'flickr.photos.search', 'format': 'json', 'api_key': api_key, 'lat': lat, 'lon': lon, 'has_geo': 1, 'min_taken_date': '1990-01-01 00:00:00', 'extras': 'date_upload,date_taken,owner_name,geo,url_t,url_m', 'radius': rad, 'radius_units':'km', 'per_page': 500}
         processed = 0
@@ -49,11 +49,12 @@ class Flickr(module.Module):
                 message = photo['title']
                 try: time = datetime.strptime(photo['datetaken'], '%Y-%m-%d %H:%M:%S')
                 except ValueError: time = datetime(1970, 1, 1)
-                new += self.add_pushpins(source, screen_name, profile_name, profile_url, media_url, thumb_url, message, latitude, longitude, time)
+                pins.append(self.createPin(source, screen_name, profile_name, profile_url, media_url, thumb_url, message, latitude, longitude, time))
                 count += 1
             processed += len(jsonobj['photos']['photo'])
             #self.verbose('%s photos processed.' % (processed))
             if jsonobj['photos']['page'] >= jsonobj['photos']['pages']:
                 break
             payload['page'] = jsonobj['photos']['page'] + 1
+        self.addPins(locname, pins)
         #self.summarize(new, count)

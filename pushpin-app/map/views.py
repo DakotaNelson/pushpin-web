@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST
 from django.core import serializers
+from django.core.management import call_command
 from django.forms import ModelForm
 from django.core.exceptions import ObjectDoesNotExist
 from map.tasks import youtubeTask, twitterTask, picasaTask, shodanTask
@@ -87,10 +88,7 @@ def addLocation(request):
         response_data['message'] = 'Location was successfully added.'
 
         # run all modules to get data for this new location
-        twitterTask.delay()
-        youtubeTask.delay()
-        picasaTask.delay()
-        shodanTask.delay()
+        call_command('getdata')
     else:
         # form is not valid
         response_data['result'] = 'failed'

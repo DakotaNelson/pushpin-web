@@ -54,8 +54,7 @@ Data is pulled hourly by celerybeat and manually every time a new location is ad
  * Create the actual module in `pushpin-app/modules`, using another model as a template
  * In `pushpin-app/map/tasks.py`, add a task for your module by copying another module and modifying it
  * In `pushpin-app/map/management/commands/getdata.py`, add your task to the list that needs to be run
- * In `pushpin-app/map/views.py`, add your task to the list of tasks that is run after a new location is added in the addLocation view.
- * Rebuild the Docker container (or restart celery and celery beat if not using docker)
+ * Rebuild the Docker container (or restart celery and celery beat if not using Docker)
 
 ### Other notes:
 
@@ -63,13 +62,10 @@ Data is pulled hourly by celerybeat and manually every time a new location is ad
 
 
 ### Wishlist:
-[] Capable of handling multiple users/authentication.
-[] Media view, listing media data directly, for deeper analysis.
-[] Make timeline on main page brushable to narrow displayed pins by date.
-[] Break down Celery tasks to the point of getting a single location's data from a single API, use a lock to make sure only one worker pulls from an API at a time.
-[] Use RabbitMQ as a backend to have Celery keep task status updated, show user progress of data-pulling tasks.
-[] Only pull data from APIs since the last update. (i.e. keep track of when run last and use that information)
-
-
-
-\* Soon is a very relative term, don't you think?
+* Capable of handling multiple users/authentication.
+* Media view, listing media data directly, for deeper analysis.
+* Make timeline on main page brushable to narrow displayed pins by date.
+* Break down Celery tasks to the point of getting a single location's data from a single API, use a lock to make sure only one worker pulls from an API at a time.
+* Use RabbitMQ as a backend to have Celery keep task status updated, show user progress of data-pulling tasks.
+* Be able to manually trigger a data pull from the webapp. (Especially useful if for only one location.)
+* Only pull data from APIs since the last update. (i.e. keep track of when run last and use that information)
