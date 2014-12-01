@@ -44,7 +44,7 @@ Run `build.sh` to build the docker image from source in case you want to make an
  * In `pushpin-app/map/tasks.py`, add a task for your module by copying another module and modifying it
  * In `pushpin-app/map/management/commands/getdata.py`, add your task to the list that needs to be run
  * In `pushpin-app/map/views.py`, add your task to the list of tasks that is run after a new location is added in the addLocation view.
- * Restart celery and celery beat
+ * Rebuild the Docker container (or restart celery and celery beat if not using docker)
 
 ### Other notes:
 

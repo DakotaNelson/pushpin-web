@@ -14,12 +14,14 @@
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js" charset="utf-8"></script>
 <script src="https://code.jquery.com/jquery-2.1.1.min.js" charset="utf-8"></script>
+<script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js" charset="utf-8"></script>
 <script src="{% static "js/facebox.js" %}" charset="utf-8"></script>
 <script src="{% static "js/jquery.linkify.min.js" %}" charset="utf-8"></script>
 
 <!-- css goes here -->
 <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/facebox.css" %}" />
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css"css/facebox.css" %}" />
 
 {% block embedded_js %}
 <script type="text/javascript">
@@ -60,6 +62,7 @@ google.maps.event.addDomListener(window, 'load', init);
 <script src="{% static "js/main.js" %}" charset="utf-8"></script>
 <script src="{% static "js/timeline.js" %}" charset="utf-8"></script>
 <script src="{% static "js/map.js" %}" charset="utf-8"></script>
+<script src="{% static "js/locations.js" %}" charset="utf-8"></script>
 
 
 </head>
@@ -81,17 +84,9 @@ google.maps.event.addDomListener(window, 'load', init);
 
     {% block locations %}
     <div id="locations">
-      <div id="location-controls">
-        <a href="#new-location" rel="facebox" class="horiz-item">
-          Add New Location
-        </a>
-        <a id="delete-location" href="#" class="horiz-item">
-          Delete Current Location
-        </a>
-      </div>
       <div id="locations-inner">
-        <table>
-          <thead>
+        <table class="stripe">
+          <!--<thead>
           <tr>
             <td> Location Name </td>
             <td> Lat </td>
@@ -110,14 +105,25 @@ google.maps.event.addDomListener(window, 'load', init);
               <td> {{ loc.date|date:"m/d/y" }} </td>
             </tr>
           {% endfor %}
-          </tbody>
+          </tbody>-->
         </table>
       </div>
     </div>
     {% endblock %}
 
     {% block timeline %}
-    <div id="timeline"></div>
+    <div id="timeline-wrapper">
+      <div id="location-controls">
+        <span id="current-location">{{ location.name }}</span>
+        <a href="#new-location" rel="facebox" class="horiz-item">
+          Add New Location
+        </a>
+        <a id="delete-location" href="#" class="horiz-item">
+          Delete Current Location
+        </a>
+      </div>
+      <div id="timeline"></div>
+    </div>
     {% endblock %}
 
     <div class="overlay" id="new-location">

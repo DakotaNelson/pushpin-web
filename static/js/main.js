@@ -4,6 +4,8 @@ $(document).ready( function() {
   $.facebox.settings.loadingImage = GLOBAL.faceboxLoadingImage;
   $('a[rel*=facebox]').facebox();
   $('#delete-location').on('click', deleteLocation);
+
+  LOCATIONS.onLoad();
 });
 
 function newLocationSubmit(e) {
@@ -22,6 +24,10 @@ function newLocationSuccess(d) {
   var message = "Success! " + d.message;
   $("#facebox .content").append(message);
   $("#facebox .content").append("<br>It will take a minute or two to get data for this new location; it will appear on a refresh.");
+
+  LOCATIONS.update();
+
+  //setTimeout(function() { $.facebox.close; }, 2000);
 }
 
 function newLocationFail(d) {
@@ -34,7 +40,7 @@ function deleteLocation(e) {
   var csrftoken = getCookie('csrftoken');
 
   $.ajax({
-    url: './delete/',
+    url: window.location.pathname + '/delete/',
     headers: {"X-CSRFToken":csrftoken},
     type: "POST",
     data: {},
@@ -47,6 +53,8 @@ function deleteLocationSuccess(d) {
   $("#delete-location").html("Location Removed");
   // remove the click handler
   $("#delete-location").off();
+  LOCATIONS.update();
+  window.location = '/'
 }
 
 function deleteLocationFail(d) {

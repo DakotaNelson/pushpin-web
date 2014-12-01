@@ -141,6 +141,10 @@ CELERY_TASK_SERIALIZER='json'
 #CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 CELERY_ACCEPT_CONTENT = ['json']
 
+# where to redirect users when they need to log in
+LOGIN_URL = '/admin'
+LOGIN_REDIRECT_URL = '/'
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.

@@ -2,7 +2,7 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET, require_POST
 from django.core import serializers
 from django.forms import ModelForm
 from django.core.exceptions import ObjectDoesNotExist
@@ -66,7 +66,7 @@ def noLocation(request):
     return render(request, 'map/noLocation.html', context)
 
 @login_required
-@require_GET
+@require_POST
 def addLocation(request):
     response_data = {}
 
@@ -118,34 +118,23 @@ def deleteLocation(request, locName):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @login_required
-@require_POST
+@require_GET
 def getLocations(request):
-    response_data = {}
-
-    print("Adding location...")
-    # fill the form template with the incoming data
-    form = LocationForm(request.POST)
-    # save the form, but wait to let us make some changes
-    location = form.save(commit=False)
-    location.date = datetime.now()
-    location.latest_data = datetime.now()
     # TODO: add multiple users
-    location.user = User.objects.get(username='test')
+    user = User.objects.get(username='test')
 
-    if form.is_valid():
-        # add the new location
-        location.save()
-        response_data['result'] = 'success'
-        response_data['message'] = 'Location was successfully added.'
+    locations = list(Location.objects.filter(user__username=user.username)
+                                     .values_list('latitude','longitude','radius','name','date')
+                                     .order_by('-date'))
 
-        # run all modules to get data for this new location
-        twitterTask.delay()
-        youtubeTask.delay()
-        picasaTask.delay()
-        shodanTask.delay()
-    else:
-        # form is not valid
-        response_data['result'] = 'failed'
-        response_data['message'] = 'Data is invalid.'
+    locObject = []
+    for location in locations:
+        obj = {}
+        obj['latitude'] = location[0]
+        obj['longitude'] = location[1]
+        obj['radius'] = location[2]
+        obj['name'] = location[3]
+        obj['date'] = str(location[4])
+        locObject.append(obj)
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(json.dumps(locObject), content_type="application/json")
