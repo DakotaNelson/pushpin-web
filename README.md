@@ -1,6 +1,11 @@
 Pushpin modules broken out of [recon-ng](https://bitbucket.org/LaNMaSteR53/recon-ng/) and turned into a webapp. Pushpin-web provides an easy web interface to keep track of geotagged social media activity. Deployed using Docker for ease of use.
 
+A project by [Black Hills Information Security](http://blackhillsinfosec.com)
+![Black Hills Information Security](http://blackhillsinfosec.com/_images/BHIS-Logo.png "Black Hills Information Security")
+
 ## Quickstart:
+First, make sure you've got Docker installed: https://docs.docker.com/installation/
+
 Run `start.sh` to download a pre-built image from Docker hub and get started super fast. Visit localhost:8000 in your browser to see the results. *In production environments, open up start.sh and configure some unique passwords!*
 
 Run `build.sh` to build the docker image from source in case you want to make any changes. If there's a local copy of an image (i.e. one that you built), Docker (and by extension, `start.sh`) will use that instead.
