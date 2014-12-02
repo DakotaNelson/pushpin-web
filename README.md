@@ -9,11 +9,13 @@ First, make sure you've got Docker installed: https://docs.docker.com/installati
 
 Run `start.sh` to download a pre-built image from Docker hub and get started super fast. Visit localhost:8000 in your browser to see the results. *In production environments, open up start.sh and configure some unique passwords!*
 
-Run `build.sh` to build the docker image from source in case you want to make any changes. If there's a local copy of an image (i.e. one that you built), Docker (and by extension, `start.sh`) will use that instead.
+Run `local.sh` to build the docker image from source and deploy it. This is useful in case you want to make any changes to pushpin locally. *In production environments, open up local.sh and configure some unique passwords!*
 
-Run `update.sh` to pull the latest build of pushpin-web for use with `start.sh`.
+Run `cleanup.sh` to remove your current pushpin deploy (either because you've had enough of this pushpin business, because you want to deploy a new version).
 
-Run `redeploy.sh` to manually rebuild pushpin from the local Dockerfile, *destroy your pushpin deployment*, then redeploy, wait a while, and show you some logfiles of the deployment. Useful for testing changes you've made locally.
+Run `redeploy.sh` to manually rebuild pushpin from the local Dockerfile, *destroy your pushpin deployment, including database*, then redeploy, wait a while, and show you some logfiles of the deployment. Useful for testing changes you've made locally.
+
+In case everything goes completely wrong, `panic_mode.sh` will stop and remove all of your Docker containers. **Use with caution!**
 
 
 ## FAQ:
@@ -24,8 +26,11 @@ Once you've run `start.sh`, go to localhost:8000, where you will be prompted to 
 ##### Q: When does data get pulled?
 Data is pulled hourly by celerybeat and manually every time a new location is added. If you don't see any data for a location you just added, try refreshing - it sometimes takes a minute or two to pull data from the various APIs.
 
-##### Q: HOW DO I MAKE IT STOP?!?
-`sudo docker stop $(sudo docker ps -q)` will stop all running containers and `sudo docker rm $(sudo docker ps -q)` will remove them. Be careful with that second one, it'll blow away your database container and all your data with it.
+##### Q: I'm getting an error `Error response from daemon: Conflict, The name <name> is already assigned to <some hash value>`. What do?
+Run `cleanup.sh` to delete your current pushpin containers in order to create new ones.
+
+##### Q: Everything is broken. HOW DO I MAKE IT STOP?!?
+`panic_mode.sh` will bring an end to the chaos. It'll also destroy **all** of your Docker containers, not just pushpin, so **be careful**!
 
 
 ### Rough notes on local usage for development:
