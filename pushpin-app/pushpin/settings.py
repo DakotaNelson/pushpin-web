@@ -20,7 +20,7 @@ DATABASES = {
         'USER': env("POSTGRES_USER", "pushpin"),
         'PASSWORD': env("POSTGRES_PASSWORD"),
         'HOST': env("POSTGRES_HOST", "postgres"),
-        'PORT': '',                      # Set to empty string for default.
+        'PORT': env('POSTGRES_PORT',''),                      # Set to empty string for default.
     }
 }
 
@@ -68,7 +68,7 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = 'http://localhost:8001/'
+STATIC_URL = env('STATIC_URL','http://localhost:8001/')
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -86,7 +86,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'qzz%ce%0#yo#5r*aw33@wxma6%tdy2)ed(i3na8_i9(+yd$g70'
+SECRET_KEY = env("SECRET_KEY",'qzz%ce%0#yo#5r*aw33@wxma6%tdy2)ed(i3na8_i9(+yd$g70')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
