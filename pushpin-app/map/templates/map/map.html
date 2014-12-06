@@ -24,7 +24,6 @@
 {% endblock %}
 
 {% block embedded_js %}
-
 // NOTE: this is only here so that it can be used with templating
 // TODO: use AJAX to get this data instead of this extreme jank
 var rawData = {{ pushpins|safe }};
@@ -76,26 +75,6 @@ google.maps.event.addDomListener(window, 'load', init);
     <div id="locations">
       <div id="locations-inner">
         <table class="stripe">
-          <!--<thead>
-          <tr>
-            <td> Location Name </td>
-            <td> Lat </td>
-            <td> Lon </td>
-            <td> Radius</td>
-            <td> Created </td>
-          </tr>
-          </thead>
-          <tbody>
-          {% for loc in locations %}
-            <tr onclick="document.location='{% url 'map:map location' loc.name %}'">
-              <td> {{ loc.name|truncatechars:35 }} </td>
-              <td> {{ loc.latitude }} </td>
-              <td> {{ loc.longitude }} </td>
-              <td> {{ loc.radius }} </td>
-              <td> {{ loc.date|date:"m/d/y" }} </td>
-            </tr>
-          {% endfor %}
-          </tbody>-->
         </table>
       </div>
     </div>
@@ -104,13 +83,17 @@ google.maps.event.addDomListener(window, 'load', init);
     {% block timeline %}
     <div id="timeline-wrapper">
       <div id="location-controls">
-        <span id="current-location">{{ location.name }}</span>
+        <span id="current-location">
+          {{ location.name }}
+        </span>
+        <a href="{% url 'map:media view' location %}" target="_blank" class="horiz-item">
+          View Media for Location</a>
+        |
         <a href="#new-location" rel="facebox" class="horiz-item">
-          Add New Location
-        </a>
+          Add New Location</a>
+        |
         <a id="delete-location" href="#" class="horiz-item">
-          Delete Current Location
-        </a>
+          Delete Current Location</a>
       </div>
       <div id="timeline"></div>
     </div>

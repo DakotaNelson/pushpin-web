@@ -64,7 +64,7 @@ td {
   padding-right: 10px;
 }
 #location-controls #current-location {
-  padding-right: 45%;
+  padding-right: 35%;
   font-weight: bold;
 }
 #locations-inner {
@@ -124,7 +124,7 @@ td {
     padding: 10px;
     color: white;
     border: 2px solid orange;
-    /* Fallback for web browsers that doesn't support RGBa */
+    /* Fallback for web browsers that don't support RGBa */
     background: rgb(0, 0, 0);
     /* RGBa opacity */
     background: rgba(0, 0, 0, 0.6);
@@ -136,4 +136,9 @@ input[type=checkbox] {
 }
 .overlay {
   display: none;
+}
+
+#media-wrapper {
+  margin-left: 10px;
+  margin-right: 10px;
 }

@@ -6,6 +6,15 @@
   Pushpin | Media | {{ location.name }}
 {% endblock title %}
 
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css"css/facebox.css" %}" />
+{% endblock %}
+
+{% block extra_js %}
+<script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js" charset="utf-8"></script>
+<script src="{% static "js/media/main.js" %}" charset="utf-8"></script>
+{% endblock %}
+
 {% block embedded_js %}
 var rawData = {{ pushpins|safe }};
 var cleanData = [];
@@ -17,4 +26,16 @@ function init() {
     cleanData.push(datum.fields);
     });
   }
-{% enblock embedded_js %}
+{% endblock embedded_js %}
+
+
+{% block body %}
+<div id="media-wrapper">
+  <center>
+    <h3>{{ location.name }}</h3>
+  </center>
+
+  <table id="media" class="stripe">
+  </table>
+</div>
+{% endblock body %}
