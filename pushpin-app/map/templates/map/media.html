@@ -1,0 +1,20 @@
+{% extends "map/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+  Pushpin | Media | {{ location.name }}
+{% endblock title %}
+
+{% block embedded_js %}
+var rawData = {{ pushpins|safe }};
+var cleanData = [];
+
+function init() {
+  // this is called on load from main.js
+  // having this here is incredibly hacky
+  rawData.forEach( function(datum) {
+    cleanData.push(datum.fields);
+    });
+  }
+{% enblock embedded_js %}

@@ -17,7 +17,7 @@ from map.forms import LocationForm
 
 @login_required
 @require_GET
-def mapLocation(request, locName):
+def mapView(request, locName):
     # the unique location
     location = get_object_or_404(Location, name=locName)
 
@@ -48,7 +48,33 @@ def mapLocation(request, locName):
                 'locationForm': locationForm
               }
 
-    return render(request, 'map/index.html', context)
+    return render(request, 'map/map.html', context)
+
+@login_required
+@require_GET
+def mediaView(request, locName):
+    # the unique location
+    location = get_object_or_404(Location, name=locName)
+
+    # then get pins based on that location
+    pushpins = Pushpin.objects.filter(location__name=locName)
+
+    sources = []
+
+    for pin in pushpins:
+        # get the display name, rather than the two letter abbreviation
+        pin.source = pin.get_source_display()
+        # build a list of active sources
+        if pin.source not in sources:
+            sources.append(pin.source)
+
+    context = {
+                'sources': sources,
+                'location': location,
+                'pushpins': serializers.serialize('json', pushpins),
+              }
+
+    return render(request, 'map/media.html', context)
 
 @login_required
 @require_GET

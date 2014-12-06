@@ -1,12 +1,11 @@
-{% extends "map/index.html" %}
+{% extends "map/map.html" %}
 {% load staticfiles %}
 
 {% block title %}
-Pushpin
+Pushpin | Map
 {% endblock %}
 
 {% block embedded_js %}
-<script type="text/javascript">
 var GLOBAL = {
   faceboxCloseImage: '{% static "images/closelabel.png" %}',
   faceboxLoadingImage: '{% static "images/loading.gif" %}',
@@ -23,7 +22,6 @@ function init() {
 }
 
 google.maps.event.addDomListener(window, 'load', init);
-</script>
 {% endblock %}
 
 

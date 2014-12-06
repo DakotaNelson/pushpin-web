@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+{% load staticfiles %}
+<html>
+<head>
+  <title>
+  {% block title %}
+  {% endblock %}
+  </title>
+<meta charset="UTF-8">
+
+<!-- js libs go here -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js" charset="utf-8"></script>
+<script src="https://code.jquery.com/jquery-2.1.1.min.js" charset="utf-8"></script>
+{% block extra_js %}
+{% endblock %}
+
+<!-- css goes here -->
+<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
+{% block extra_css %}
+{% endblock %}
+
+<script type="text/javascript">
+{% block embedded_js %}
+{% endblock %}
+</script>
+
+</head>
+<body>
+  {% block body %}
+    Nothing to see here, move along.
+  {% endblock %}
+</body>
+</html>
