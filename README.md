@@ -59,14 +59,14 @@ Run `cleanup.sh` to delete your current pushpin containers in order to create ne
 
 ### Other notes:
 
-* If you deploy to somewhere other than localhost, make sure to set the `STATIC_URL` environment variable to `http://yourDomainOrIP:8001/`
+* If you deploy to somewhere other than localhost, make sure to set the `STATIC_URL` environment variable to `http://yourDomainOrIP:8001/`. Note that the trailing slash is *very important*.
 
 ### Wishlist:
 * Capable of handling multiple users/authentication.
-* Media view, listing media data directly, for deeper analysis.
 * Make timeline on main page brushable to narrow displayed pins by date.
 * Break down Celery tasks to the point of getting a single location's data from a single API, use a lock to make sure only one worker pulls from an API at a time.
+* Intelligently deal with rate limiting, rather than just throttling API calls to safe levels without ever checking. (Could help with previous wishlist item.)
 * Use RabbitMQ as a backend to have Celery keep task status updated, show user progress of data-pulling tasks.
-* Be able to manually trigger a data pull from the webapp. (Especially useful if for only one location.)
+* Be able to manually trigger a data pull from the webapp. (Especially useful if only one location is triggered.)
 * Only pull data from APIs since the last update. (i.e. keep track of when run last and use that information)
 * Linkify links in pushpins. The linkify library is already in place, it just needs to be used.
