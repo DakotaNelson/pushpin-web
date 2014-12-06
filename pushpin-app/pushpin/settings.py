@@ -20,7 +20,7 @@ DATABASES = {
         'USER': env("POSTGRES_USER", "pushpin"),
         'PASSWORD': env("POSTGRES_PASSWORD"),
         'HOST': env("POSTGRES_HOST", "postgres"),
-        'PORT': env('POSTGRES_PORT',''),                      # Set to empty string for default.
+        'PORT': env("POSTGRES_PORT","5432"),                      # Set to empty string for default.
     }
 }
 
@@ -143,7 +143,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 
 # where to redirect users when they need to log in
 LOGIN_URL = '/admin'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/map/location'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

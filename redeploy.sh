@@ -12,7 +12,7 @@ sudo docker rm pushpin
 
 sudo docker run --name pushpin-postgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_USER=pushpin -d postgres
 sleep 5
-sudo docker run --name pushpin -p 8000:8000 -p 8001:8001 --link pushpin-postgres:postgres -e POSTGRES_PASSWORD=mysecretpassword -e DJANGO_PASSWORD=test -e DEBUG=True -d dakotanelson/pushpin
+sudo docker run --name pushpin -p 8000:8000 -p 8001:8001 --link pushpin-postgres:postgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_PORT=5432 -e DJANGO_PASSWORD=test -e DEBUG=True -d dakotanelson/pushpin
 
 sleep 20
 

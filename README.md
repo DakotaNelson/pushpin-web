@@ -51,20 +51,15 @@ Run `cleanup.sh` to delete your current pushpin containers in order to create ne
 * Run `python manage.py celery beat` to run celery's scheduling engine
 * Run `pushpin-app/deploy.py` to set up some users and a place to put you API keys.
 
-### To deploy:
-
-* Change `ALLOWED_HOSTS` (you can probably guess where that is by now) to the valid host/domain names.
-
 ### To add a module:
- * Create the actual module in `pushpin-app/modules`, using another model as a template
+ * Create the actual module in `pushpin-app/modules`. Take a look at some other modules in that folder to get an idea of how to make it work.
  * In `pushpin-app/map/tasks.py`, add a task for your module by copying another module and modifying it
  * In `pushpin-app/map/management/commands/getdata.py`, add your task to the list that needs to be run
  * Rebuild the Docker container (or restart celery and celery beat if not using Docker)
 
 ### Other notes:
 
-* If you'd like to host your own static files, change `STATIC_URL` in settings.py to point to your custom location.
-
+* If you deploy to somewhere other than localhost, make sure to set the `STATIC_URL` environment variable to `http://yourDomainOrIP:8001/`
 
 ### Wishlist:
 * Capable of handling multiple users/authentication.
