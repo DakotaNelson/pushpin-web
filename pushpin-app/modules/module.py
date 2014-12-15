@@ -2,11 +2,13 @@ from map.models import Keys, Pushpin, Location
 from django.core.exceptions import ValidationError
 from django.db import models
 import requests
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urlencode
 import json
 import re
 import pytz
 import time
+import random
+import string
 from datetime import datetime
 
 class ModuleException(Exception):
@@ -90,6 +92,43 @@ class Module:
     #======================================================
     # External API Methods
     #======================================================
+
+    def get_explicit_oauth_token(self, resource, scope, authorize_url, access_url):
+        token_name = resource+'_token'
+        try:
+            return self.getKey(token_name)
+        except:
+            pass
+        import urllib
+        import webbrowser
+        import socket
+        client_id = self.getKey(resource+'_api')
+        client_secret = self.getKey(resource+'_secret')
+        port = 31337
+        redirect_uri = 'http://localhost:%d' % (port)
+        payload = {'response_type': 'code', 'client_id': client_id, 'scope': scope, 'state': self.random_str(40), 'redirect_uri': redirect_uri}
+        authorize_url = '%s?%s' % (authorize_url, urlencode(payload))
+        print(webbrowser._browsers)
+        w = webbrowser.get()
+        w.open(authorize_url)
+        # open a socket to receive the access token callback
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.bind(('127.0.0.1', port))
+        sock.listen(1)
+        conn, addr = sock.accept()
+        data = conn.recv(1024)
+        conn.sendall('HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<html><head><title>Recon-ng</title></head><body>Authorization code received. Return to Recon-ng.</body></html>')
+        conn.close()
+        # process the received access token
+        authorization_code = re.search('code=([^\s&]*)', data).group(1)
+        payload = {'grant_type': 'authorization_code', 'code': authorization_code, 'redirect_uri': redirect_uri, 'client_id': client_id, 'client_secret': client_secret}
+        resp = self.request(access_url, method='POST', payload=payload)
+        if 'error' in resp.json:
+            self.error(resp.json['error_description'])
+            return None
+        access_token = resp.json['access_token']
+        self.addKey(token_name, access_token)
+        return access_token
 
     def get_twitter_oauth_token(self):
         try:
@@ -254,3 +293,11 @@ class Module:
             See:
         https://stackoverflow.com/questions/15261821/django-unique-bulk-inserts
         """
+
+    #======================================================
+    # Assorted Utility Methods
+    #======================================================
+
+    def random_str(self, length):
+        return ''.join(random.choice(string.ascii_lowercase) for i in range(length))
+

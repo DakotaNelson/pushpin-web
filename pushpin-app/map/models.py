@@ -23,6 +23,7 @@ class Pushpin(models.Model):
     YOUTUBE = "YU"
     FACEBOOK = "FB"
     LINKEDIN = "LI"
+    INSTAGRAM = "IN"
 
     SOURCES = (
                 (TWITTER, "Twitter"),
@@ -31,7 +32,8 @@ class Pushpin(models.Model):
                 (SHODAN, "Shodan"),
                 (YOUTUBE, "Youtube"),
                 (FACEBOOK, "Facebook"),
-                (LINKEDIN, "LinkedIn")
+                (LINKEDIN, "LinkedIn"),
+                (INSTAGRAM, "Instagram")
               )
 
     source = models.CharField(choices=SOURCES, max_length=2)
@@ -51,6 +53,8 @@ class Pushpin(models.Model):
 
 class Keys(models.Model):
     # holds a user's API keys
+    instagram_api = models.CharField(max_length = 50, blank=True, null=True)
+    instagram_secret = models.CharField(max_length = 50, blank=True, null=True)
     flickr_api = models.CharField(max_length = 50, blank=True, null=True)
     google_api = models.CharField(max_length = 50, blank=True, null=True)
     shodan_api = models.CharField(max_length = 50, blank=True, null=True)

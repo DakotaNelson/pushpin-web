@@ -55,6 +55,7 @@ Run `cleanup.sh` to delete your current pushpin containers in order to create ne
  * Create the actual module in `pushpin-app/modules`. Take a look at some other modules in that folder to get an idea of how to make it work.
  * In `pushpin-app/map/tasks.py`, add a task for your module by copying another module and modifying it
  * In `pushpin-app/map/management/commands/getdata.py`, add your task to the list that needs to be run
+ * If required, in `pushpin-app/map/models.py`, add your new source in the Pushpin model, and add any new keys in the Keys model.
  * Rebuild the Docker container (or restart celery and celery beat if not using Docker)
 
 ### Other notes:
