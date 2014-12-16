@@ -20,6 +20,9 @@ In case everything goes completely wrong, `panic_mode.sh` will stop and remove a
 
 ## FAQ:
 
+##### Q: I'm trying to deploy this to somewhere other than localhost, and it's super broken. Help?
+Check out the section below on deploying places other than localhost. There are a few special things you have to do.
+
 ##### Q: How do I use this thing?
 Once you've run `start.sh`, go to localhost:8000, where you will be prompted to log in. Enter `test` and `test`, unless you configured the `PUSHPIN_PASSWORD` environment variable to be something else. Either way, username is test. Once you've logged in, you'll be redirected to the admin page, where you can add API keys. You should do so, or else you won't get any data. Once that's done, head back to localhost:8000 and you'll see the pushpin interface. Have fun!
 
@@ -31,6 +34,12 @@ Run `cleanup.sh` to delete your current pushpin containers in order to create ne
 
 ##### Q: Everything is broken. HOW DO I MAKE IT STOP?!?
 `panic_mode.sh` will bring an end to the chaos. It'll also destroy **all** of your Docker containers, not just pushpin, so **be careful**!
+
+
+### Deploying other than localhost:
+
+* Make sure to set the `STATIC_URL` environment variable to `http://yourDomainOrIP:8001/`. Note that the trailing slash is *very important*.
+* Set the `ALLOWED_HOSTS` environment variable to be the address of your host. (IP address or domain name) See [Django's docs](https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts) for details.
 
 
 ### Rough notes on local usage for development:
@@ -56,10 +65,6 @@ Run `cleanup.sh` to delete your current pushpin containers in order to create ne
  * In `pushpin-app/map/tasks.py`, add a task for your module by copying another module and modifying it
  * In `pushpin-app/map/management/commands/getdata.py`, add your task to the list that needs to be run
  * Rebuild the Docker container (or restart celery and celery beat if not using Docker)
-
-### Other notes:
-
-* If you deploy to somewhere other than localhost, make sure to set the `STATIC_URL` environment variable to `http://yourDomainOrIP:8001/`. Note that the trailing slash is *very important*.
 
 ### Wishlist:
 * Capable of handling multiple users/authentication.
