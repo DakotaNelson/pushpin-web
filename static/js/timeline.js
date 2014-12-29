@@ -1,6 +1,6 @@
 var TIMELINE = {
 
-  elementId: "#timeline",
+  elementId: "#timeline", // the ID of the element this chart lives in
 
   minTime: null,
   maxTime: null,
@@ -10,6 +10,7 @@ var TIMELINE = {
   data: null, // note: this is always CLEANED data
   active: null, // array of strings describing the active data sources
 
+  // does initialization of the chart
   createTimeline: function(data) {
     if (TIMELINE.active == null) {
       // if the list of active sources hasn't been initialized, do so

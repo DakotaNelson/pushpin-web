@@ -21,38 +21,18 @@
 <script src="{% static "js/timeline.js" %}" charset="utf-8"></script>
 <script src="{% static "js/map.js" %}" charset="utf-8"></script>
 <script src="{% static "js/locations.js" %}" charset="utf-8"></script>
+<script src="{% static "js/backend.js" %}" charset="utf-8"></script>
 {% endblock %}
 
 {% block embedded_js %}
-// NOTE: this is only here so that it can be used with templating
-// TODO: use AJAX to get this data instead of this extreme jank
-var rawData = {{ pushpins|safe }};
-var cleanData = [];
-
+// NOTE: this is only here so that it can be used with templating. Ew.
 var GLOBAL = {
   faceboxCloseImage: '{% static "images/closelabel.png" %}',
   faceboxLoadingImage: '{% static "images/loading.gif" %}',
 };
 
-function init() {
-  // this is called on load from main.js
-  // having this here is incredibly hacky
-  rawData.forEach( function(datum) {
-    cleanData.push(datum.fields);
-    });
-
-  MAP.createMap({{ location.latitude }},
-                {{ location.longitude }},
-                {{ location.radius }},
-                14, // zoom level
-                window.cleanData
-               ); // creates the map
-
-  TIMELINE.createTimeline(window.cleanData); // creates the d3.js timeline
-}
-
-google.maps.event.addDomListener(window, 'load', init);
-
+  // TODO turn this into an AJAX call (or something)
+  BACKEND.loc = {"name": "{{location}}", "lat":{{location.latitude}}, "lon": {{location.longitude}}, "rad":{{location.radius}}};
 {% endblock embedded_js %}
 
 {% block body %}

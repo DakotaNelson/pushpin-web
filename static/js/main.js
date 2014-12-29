@@ -5,9 +5,25 @@ $(document).ready( function() {
   $('a[rel*=facebox]').facebox();
   $('#delete-location').on('click', deleteLocation);
 
+  BACKEND.getData();
   LOCATIONS.onLoad();
 });
 
+/* Called when data has been fetched to initialize all elements that need the data.
+ */
+function initializeAll(pins,loc) {
+  MAP.createMap(loc.lat,
+                loc.lon,
+                loc.rad,
+                14, // zoom level
+                pins
+               ); // creates the map
+
+  TIMELINE.createTimeline(pins); // creates the d3.js timeline
+}
+
+/* Called when the submit button on the new location form is clicked.
+ */
 function newLocationSubmit(e) {
   event.preventDefault();
   $.ajax({
@@ -20,6 +36,8 @@ function newLocationSubmit(e) {
   return false;
 }
 
+/* Callback if the new location request succeeds. Updates the locations module.
+ */
 function newLocationSuccess(d) {
   var message = "Success! " + d.message;
   $("#facebox .content").append(message);
@@ -30,11 +48,15 @@ function newLocationSuccess(d) {
   //setTimeout(function() { $.facebox.close; }, 2000);
 }
 
+/* Callback if the new location request fails. Displays error message.
+ */
 function newLocationFail(d) {
   var message = "Failure. " + d.message;
   $("#facebox .content").append(message);
 }
 
+/* Fires when the "delete location" button is clicked
+ */
 function deleteLocation(e) {
   event.preventDefault();
   var csrftoken = getCookie('csrftoken');
@@ -49,6 +71,8 @@ function deleteLocation(e) {
   });
 }
 
+/* Callback upon successful removal of a location
+ */
 function deleteLocationSuccess(d) {
   $("#delete-location").html("Location Removed");
   // remove the click handler
@@ -61,6 +85,8 @@ function deleteLocationFail(d) {
   console.log(d);
 }
 
+/* Used to grab CSRF cookies
+ */
 function getCookie(name) {
   var cookieValue = null;
   if (document.cookie && document.cookie != '') {
