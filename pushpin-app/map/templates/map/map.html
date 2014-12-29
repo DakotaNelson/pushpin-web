@@ -48,7 +48,12 @@ var GLOBAL = {
     {% endblock nav %}
 
     {% block map %}
-    <div class="map" id="map"></div>
+    <div class="map" id="map">
+      <div class="loading">
+        <img src="{% static "images/loading.gif" %}" alt="loading spinner"></img>
+        <span>Data is loading...</span>
+      </div>
+    </div>
     {% endblock map %}
 
     {% block locations %}
