@@ -109,7 +109,7 @@ class Module:
         payload = {'response_type': 'code', 'client_id': client_id, 'scope': scope, 'state': self.random_str(40), 'redirect_uri': redirect_uri}
         authorize_url = '%s?%s' % (authorize_url, urlencode(payload))
         print(webbrowser._browsers)
-        w = webbrowser.get()
+        w = webbrowser.get("lynx")
         w.open(authorize_url)
         # open a socket to receive the access token callback
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -117,7 +117,7 @@ class Module:
         sock.listen(1)
         conn, addr = sock.accept()
         data = conn.recv(1024)
-        conn.sendall('HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<html><head><title>Recon-ng</title></head><body>Authorization code received. Return to Recon-ng.</body></html>')
+        conn.sendall('HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<html><head><title>pushpin-web</title></head><body>Authorization code received. Return to pushpin-web.</body></html>')
         conn.close()
         # process the received access token
         authorization_code = re.search('code=([^\s&]*)', data).group(1)

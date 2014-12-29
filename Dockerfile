@@ -13,7 +13,8 @@ RUN apt-get -qq update && apt-get install -y \
       python3-pip \
       rabbitmq-server \
       python-dev \
-      libpq-dev
+      libpq-dev \
+      lynx
 
 # use pip to install requirements
 COPY requirements.txt /root/requirements.txt
