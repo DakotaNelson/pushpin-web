@@ -52,6 +52,31 @@ def mapView(request, locName):
 
 @login_required
 @require_GET
+def locationData(request, locName):
+    # the unique location
+    location = get_object_or_404(Location, name=locName)
+
+    # then get pins based on that location
+    pushpins = Pushpin.objects.filter(location__name=locName)
+
+    sources = []
+
+    for pin in pushpins:
+        # get the display name, rather than the two letter abbreviation
+        pin.source = pin.get_source_display()
+        # build a list of active sources
+        if pin.source not in sources:
+            sources.append(pin.source)
+
+    response_data = {
+                'sources': sources,
+                'pushpins': serializers.serialize('json', pushpins)
+              }
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@login_required
+@require_GET
 def mediaView(request, locName):
     # the unique location
     location = get_object_or_404(Location, name=locName)

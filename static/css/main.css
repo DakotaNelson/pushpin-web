@@ -142,3 +142,13 @@ input[type=checkbox] {
   margin-left: 10px;
   margin-right: 10px;
 }
+
+.loading {
+  text-align: center;
+  padding-top: 80px;
+}
+
+.loading img{
+  padding-right: 5px;
+  vertical-align: middle;
+}
