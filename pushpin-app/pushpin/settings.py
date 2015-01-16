@@ -142,8 +142,8 @@ CELERY_TASK_SERIALIZER='json'
 CELERY_ACCEPT_CONTENT = ['json']
 
 # where to redirect users when they need to log in
-LOGIN_URL = '/admin'
-LOGIN_REDIRECT_URL = '/map/location'
+LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = '/map/location/'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

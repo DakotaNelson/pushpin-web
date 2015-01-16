@@ -65,5 +65,8 @@ class Keys(models.Model):
     facebook_password = models.CharField(max_length = 50, blank=True, null=True)
     user = models.OneToOneField(User, primary_key=True)
 
+    class Meta:
+        verbose_name_plural = 'keys'
+
     def __str__(self):
         return str(self.user)
