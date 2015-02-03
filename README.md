@@ -17,6 +17,15 @@ Run `redeploy.sh` to manually rebuild pushpin from the local Dockerfile, *destro
 
 In case everything goes completely wrong, `panic_mode.sh` will stop and remove all of your Docker containers. **Use with caution!**
 
+## Acquiring API Keys
+* Taken from https://bitbucket.org/LaNMaSteR53/recon-ng/wiki/Usage%20Guide#!acquiring-api-keys
+* Facebook API Key (facebook_api) - TBD
+* Facebook Secret (facebook_secret) - TBD
+* Flickr API Key (flickr_api) - TBD
+* Instagram API Key (instagram_api) - Log in [here](http://instagram.com/developer/clients/register/) with an existing Instagram account and register a new application. Add `http://localhost:31337` as the "OAuth redirect_uri". Click "Manage Clients" at the top of the screen and the API key will be available as the "CLIENT ID".
+* Instagram Secret (instagram_secret) - Log in [here](http://instagram.com/developer/). Click "Manage Clients" at the top of the screen and the Secret key will be available as the "CLIENT SECRET".
+* Twitter Consumer Key (twitter_api) - Create an application https://dev.twitter.com/apps. The Consumer key will be available on the application management page.
+* Twitter Consumer Secret (twitter_secret) - The Consumer secret will be available on the application management page for the application created above.
 
 ## FAQ:
 
