@@ -45,7 +45,8 @@ function newLocationSuccess(d) {
 
   LOCATIONS.update();
 
-  //setTimeout(function() { $.facebox.close; }, 2000);
+  setTimeout(function() { $.facebox.close; }, 2000);
+  return false;
 }
 
 /* Callback if the new location request fails. Displays error message.

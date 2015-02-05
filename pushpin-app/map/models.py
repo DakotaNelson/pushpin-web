@@ -6,7 +6,7 @@ class Location(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     radius = models.FloatField()
-    name = models.CharField(max_length = 200)
+    name = models.CharField(max_length = 200, unique=True)
     date = models.DateTimeField('date created')
     latest_data = models.DateTimeField('last time this location was updated')
     user = models.ForeignKey(User)

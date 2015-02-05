@@ -62,6 +62,11 @@ var TIMELINE = {
   },
 
   cleanData:function (timelineData) {
+    if(timelineData.length == 0) {
+      console.log("No timeline data to be cleaned.");
+      TIMELINE.data = [];
+      return;
+    }
 
     //var active = d3.keys(timelineData);
     //TIMELINE.active = active;
@@ -82,16 +87,15 @@ var TIMELINE = {
           // Shodan doesn't have dates; can't be on timeline without one
           return false;
         }
-        if(new Date().getFullYear() - datum.date.getFullYear() < 1) {
-          return true;
-        }
-        return false;
+        return true;
     });
 
     TIMELINE.minTime = d3.min(timelineData,
         function(d) { return d.date;}).getTime();
     TIMELINE.maxTime = d3.max(timelineData,
         function(d) { return d.date;}).getTime();
+
+    // TODO filter pins by date to only return last year or so
 
     TIMELINE.binSize = (TIMELINE.maxTime - TIMELINE.minTime) / TIMELINE.numBins;
 
@@ -148,6 +152,11 @@ var TIMELINE = {
   render: function() {
 
     // first: filter the data so we're only rendering the active set
+    if(TIMELINE.data.length == 0) {
+      console.log("No data for timeline.");
+      return;
+    }
+
     timelineData = TIMELINE.data.filter( function(item) {
       if(TIMELINE.active.indexOf(item.label) != -1) {
         return true;

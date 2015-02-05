@@ -48,12 +48,14 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN useradd -ms /bin/bash app
 ENV HOME /home/app
 
-# copy in the rest of the django project
-COPY ./pushpin-app/ /root/pushpin-app
+# copy in the static files
 COPY ./static/ /root/static
 
 # create a symlink to the static files for the admin pages
 RUN ln -s /usr/local/lib/python3.4/dist-packages/django/contrib/admin/static/admin /root/static/
+
+# copy in the Django files
+COPY ./pushpin-app/ /root/pushpin-app
 
 RUN chown -R app:app /root
 #chown -R app:app /usr/local && \

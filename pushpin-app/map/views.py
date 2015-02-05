@@ -57,7 +57,7 @@ def locationData(request, locName):
     location = get_object_or_404(Location, name=locName)
 
     # then get pins based on that location
-    pushpins = Pushpin.objects.filter(location__name=locName)
+    pushpins = Pushpin.objects.filter(location__name=locName).order_by('date')[:250]
 
     sources = []
 
@@ -134,7 +134,13 @@ def addLocation(request):
 
     if form.is_valid():
         # add the new location
-        location.save()
+        try:
+            location.save()
+        except ValueError:
+            response_data['result'] = 'failed'
+            response_data['message'] = 'Name must be unique.'
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+
         response_data['result'] = 'success'
         response_data['message'] = 'Location was successfully added.'
 
@@ -174,7 +180,7 @@ def getLocations(request):
 
     locations = list(Location.objects.filter(user__username=user.username)
                                      .values_list('latitude','longitude','radius','name','date')
-                                     .order_by('-date'))
+                                     .order_by('date'))
 
     locObject = []
     for location in locations:
