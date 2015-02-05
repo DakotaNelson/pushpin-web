@@ -1,12 +1,6 @@
-FROM phusion/baseimage:0.9.15
+FROM phusion/baseimage:0.9.16
 
 MAINTAINER Dakota Nelson "dakota@blackhillsinfosec.com"
-
-# Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
-
-# disable SSH
-RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # install things
 RUN apt-get -qq update && apt-get install -y \
@@ -47,11 +41,23 @@ EXPOSE 8000
 RUN mkdir -p /etc/my_init.d
 ADD runscripts/init_scripts/ /etc/my_init.d/
 
+# Clean up APT when done.
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# add a non-root user to run the app as
+RUN useradd -ms /bin/bash app
+ENV HOME /home/app
+
 # copy in the rest of the django project
-COPY . /root/
+COPY ./pushpin-app/ /root/pushpin-app
+COPY ./static/ /root/static
 
 # create a symlink to the static files for the admin pages
 RUN ln -s /usr/local/lib/python3.4/dist-packages/django/contrib/admin/static/admin /root/static/
 
-# Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN chown -R app:app /root
+#chown -R app:app /usr/local && \
+#chown -R app:app /usr/lib
+
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]

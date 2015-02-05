@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cd /root/pushpin-app && exec python3 manage.py celery worker --concurrency=2
+cd /root/pushpin-app && exec /sbin/setuser app python3 manage.py celery worker --concurrency=2
