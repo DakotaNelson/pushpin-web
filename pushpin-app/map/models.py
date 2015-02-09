@@ -21,8 +21,6 @@ class Pushpin(models.Model):
     PICASA = "PI"
     SHODAN = "SH"
     YOUTUBE = "YU"
-    FACEBOOK = "FB"
-    LINKEDIN = "LI"
 
     SOURCES = (
                 (TWITTER, "Twitter"),
@@ -30,8 +28,6 @@ class Pushpin(models.Model):
                 (PICASA, "Picasa"),
                 (SHODAN, "Shodan"),
                 (YOUTUBE, "Youtube"),
-                (FACEBOOK, "Facebook"),
-                (LINKEDIN, "LinkedIn")
               )
 
     source = models.CharField(choices=SOURCES, max_length=2)
@@ -57,12 +53,6 @@ class Keys(models.Model):
     twitter_api = models.CharField(max_length = 50, blank=True, null=True)
     twitter_secret = models.CharField(max_length = 50, blank=True, null=True)
     twitter_token = models.CharField(max_length = 200, blank=True, null=True)
-    linkedin_api = models.CharField(max_length = 50, blank=True, null=True)
-    linkedin_secret = models.CharField(max_length = 50, blank=True, null=True)
-    facebook_api = models.CharField(max_length = 50, blank=True, null=True)
-    facebook_secret = models.CharField(max_length = 50, blank=True, null=True)
-    facebook_username = models.CharField(max_length = 50, blank=True, null=True)
-    facebook_password = models.CharField(max_length = 50, blank=True, null=True)
     user = models.OneToOneField(User, primary_key=True)
 
     class Meta:
