@@ -39,9 +39,15 @@ function newLocationSubmit(e) {
 /* Callback if the new location request succeeds. Updates the locations module.
  */
 function newLocationSuccess(d) {
-  var message = "Success! " + d.message;
-  $("#facebox .content").append(message);
-  $("#facebox .content").append("<br>It will take a minute or two to get data for this new location; it will appear on a refresh.");
+  if(d.result === "failed") {
+    var message = d.message;
+  }
+  else{
+    // assume failure
+    var message = "Success! " + d.message;
+    message += "<br>It will take a minute or two to get data for this new location; it will appear on a refresh.";
+  }
+  $("#facebox #result-message").html(message);
 
   LOCATIONS.update();
 
@@ -52,8 +58,8 @@ function newLocationSuccess(d) {
 /* Callback if the new location request fails. Displays error message.
  */
 function newLocationFail(d) {
-  var message = "Failure. " + d.message;
-  $("#facebox .content").append(message);
+  var message = "Server error. Sorry about that. Refresh and try again?"
+  $("#facebox #result-message").html(message);
 }
 
 /* Fires when the "delete location" button is clicked

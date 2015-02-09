@@ -126,7 +126,12 @@ def addLocation(request):
     # fill the form template with the incoming data
     form = LocationForm(request.POST)
     # save the form, but wait to let us make some changes
-    location = form.save(commit=False)
+    try:
+        location = form.save(commit=False)
+    except ValueError:
+        response_data['result'] = 'failed'
+        response_data['message'] = 'Error saving location: name must be unique and all fields filled.'
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
     location.date = datetime.now()
     location.latest_data = datetime.now()
     # TODO: add multiple users
@@ -134,13 +139,7 @@ def addLocation(request):
 
     if form.is_valid():
         # add the new location
-        try:
-            location.save()
-        except ValueError:
-            response_data['result'] = 'failed'
-            response_data['message'] = 'Name must be unique.'
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
-
+        location.save()
         response_data['result'] = 'success'
         response_data['message'] = 'Location was successfully added.'
 
