@@ -2,7 +2,7 @@ Pushpin modules broken out of [recon-ng](https://bitbucket.org/LaNMaSteR53/recon
 
 A project by [Black Hills Information Security](http://blackhillsinfosec.com).
 
-![Black Hills Information Security](http://blackhillsinfosec.com/_images/BHIS-Logo.png "Black Hills Information Security")
+![Black Hills Information Security](http://static.wixstatic.com/media/75fce7_138b6d3a00cd4441a800ab0163ab5803.jpg_srb_p_287_287_75_22_0.50_1.20_0.00_jpg_srb "Black Hills Information Security")
 
 ## Quickstart:
 First, make sure you've got Docker installed: https://docs.docker.com/installation/
