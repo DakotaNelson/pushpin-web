@@ -16,7 +16,11 @@ class Shodan(module.Module):
         # setting limit to 1 to limit 1 API request per location
         limit = 1
         # TODO: shodan sometimes times out and throws an error
-        results = self.search_shodan_api(query, limit)
+        try:
+            results = self.search_shodan_api(query, limit)
+        except:
+            self.error("Unable to connect to Shodan API.")
+            break
         for host in results:
             os = host['os'] if 'os' in host else ''
             hostname = host['hostnames'][0] if len(host['hostnames']) > 0 else 'None'

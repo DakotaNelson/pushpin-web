@@ -24,7 +24,11 @@ class Picasa(module.Module):
         payload = {'alt': 'json', 'strict': 'true', 'bbox': '%.6f,%.6f,%.6f,%.6f' % (west_boundary, south_boundary, east_boundary, north_boundary)}
         processed = 0
         while True:
-            resp = self.request(url, content=payload)
+            try:
+                resp = self.request(url, content=payload)
+            except:
+                self.error("Unable to connect to Picasa API.")
+                break
             jsonobj = resp.json()
             if not jsonobj:
                 self.error(resp.text)

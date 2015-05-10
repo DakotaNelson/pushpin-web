@@ -17,7 +17,10 @@ class Youtube(module.Module):
         payload = {'alt': 'json', 'location': '%s!' % (point), 'location-radius': '%dkm' % (rad)}
         processed = 0
         while True:
-            resp = self.request(url, content=payload)
+            try:
+                resp = self.request(url, content=payload)
+            except:
+                self.error("Unable to connect to Youtube API.")
             jsonobj = resp.json()
             if not jsonobj:
                 self.error(resp.text)
