@@ -134,7 +134,7 @@ INSTALLED_APPS = (
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 # url for Celery's broker (RabbitMQ)
-BROKER_URL = env("RABBITMQ_HOST", "amqp://guest:guest@rabbitmq:5672")
+BROKER_URL = env("RABBITMQ_HOST", "amqp://guest:guest@rabbit:5672")
 #'amqp://guest:guest@localhost:5672'
 
 CELERY_TASK_SERIALIZER='json'

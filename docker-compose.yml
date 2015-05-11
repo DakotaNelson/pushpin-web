@@ -7,11 +7,11 @@ web:
     - ./config/:/root/pushpin-app/config/:ro
     - ./pushpin-app/:/root/pushpin-app
     - ./logs:/root/pushpin-app/logs/
-  ports:
-    - "8000:8000"
+  expose:
+    - "8000"
   links:
     - postgres
-    - rabbitmq
+    - rabbitmq:rabbit
   environment:
     POSTGRES_PASSWORD: 'mysecretpassword'
     POSTGRES_PORT: 5432
@@ -43,3 +43,9 @@ rabbitmq:
   image: rabbitmq
   #environment:
     #RABBITMQ_NODENAME: rabbitmq-server
+
+celery:
+  image: celery
+  links:
+    - rabbitmq:rabbit
+    - postgres
