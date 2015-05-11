@@ -10,7 +10,7 @@ RUN apt-get -qq update && apt-get install -y \
       libpq-dev
 
 # use pip to install requirements
-COPY requirements.txt /root/requirements.txt
+COPY ./requirements.txt /root/requirements.txt
 RUN pip3 install -r /root/requirements.txt
 
 # set up all of the service directories for runit
@@ -21,11 +21,11 @@ RUN mkdir /etc/service/static-server && \
     mkdir /etc/service/django-server
 
 # Serve the static files
-COPY runscripts/static-server.sh /etc/service/static-server/run
-EXPOSE 8001
+#COPY runscripts/static-server.sh /etc/service/static-server/run
+#EXPOSE 8001
 
 # run rabbitmq for celery to use
-COPY runscripts/rabbitmq.sh /etc/service/rabbitmq/run
+#COPY runscripts/rabbitmq.sh /etc/service/rabbitmq/run
 
 # Run celery
 COPY runscripts/celery.sh /etc/service/celery/run
@@ -34,7 +34,7 @@ COPY runscripts/celery.sh /etc/service/celery/run
 COPY runscripts/celerybeat.sh /etc/service/celerybeat/run
 
 # Run the Django server
-ADD runscripts/django-server.sh /etc/service/django-server/run
+#ADD runscripts/django-server.sh /etc/service/django-server/run
 EXPOSE 8000
 
 # Set up the startup scripts
@@ -49,13 +49,13 @@ RUN useradd -ms /bin/bash app
 ENV HOME /home/app
 
 # copy in the static files
-COPY ./static/ /root/static
+#COPY ./static/ /root/static
 
 # create a symlink to the static files for the admin pages
-RUN ln -s /usr/local/lib/python3.4/dist-packages/django/contrib/admin/static/admin /root/static/
+#RUN ln -s /usr/local/lib/python3.4/dist-packages/django/contrib/admin/static/admin /root/static/
 
 # copy in the Django files
-COPY ./pushpin-app/ /root/pushpin-app
+#COPY ./pushpin-app/ /root/pushpin-app
 
 RUN chown -R app:app /root
 #chown -R app:app /usr/local && \

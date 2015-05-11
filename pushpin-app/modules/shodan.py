@@ -20,7 +20,7 @@ class Shodan(module.Module):
             results = self.search_shodan_api(query, limit)
         except:
             self.error("Unable to connect to Shodan API.")
-            break
+            return
         for host in results:
             os = host['os'] if 'os' in host else ''
             hostname = host['hostnames'][0] if len(host['hostnames']) > 0 else 'None'

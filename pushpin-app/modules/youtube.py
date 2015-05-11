@@ -24,7 +24,7 @@ class Youtube(module.Module):
             jsonobj = resp.json()
             if not jsonobj:
                 self.error(resp.text)
-                break
+                return
             if not 'entry' in jsonobj['feed']: break
             for video in jsonobj['feed']['entry']:
                 if not video['georss$where']:

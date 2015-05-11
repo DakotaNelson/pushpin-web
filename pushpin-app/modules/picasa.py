@@ -28,7 +28,7 @@ class Picasa(module.Module):
                 resp = self.request(url, content=payload)
             except:
                 self.error("Unable to connect to Picasa API.")
-                break
+                return
             jsonobj = resp.json()
             if not jsonobj:
                 self.error(resp.text)

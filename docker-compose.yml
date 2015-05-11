@@ -1,0 +1,43 @@
+web:
+  build: .
+  #command: python3 ./pushpin-app/manage.py runserver 0.0.0.0:8000
+  command: /usr/local/bin/uwsgi --ini /root/pushpin-app/config/wsgi_config.ini
+  volumes:
+    - ./config/:/root/pushpin-app/config/:ro
+    - ./pushpin-app/:/root/pushpin-app
+    - ./logs:/root/pushpin-app/logs/
+  ports:
+    - "8000:8000"
+  links:
+    - postgres
+    - rabbitmq
+  environment:
+    POSTGRES_PASSWORD: 'mysecretpassword'
+    POSTGRES_PORT: 5432
+    PUSHPIN_PASSWORD: 'test'
+    SECRET_KEY: 'asdfjkl;1234567890qwertyuiop'
+    DEBUG: True
+    ALLOWED_HOSTS: 'localhost'
+    STATIC_URL: '/'
+
+postgres:
+  image: postgres
+  environment:
+    POSTGRES_PASSWORD: 'mysecretpassword'
+    POSTGRES_USER: 'pushpin'
+
+nginx:
+  image: nginx
+  volumes:
+    - ./static/:/usr/share/nginx/html/:ro
+    - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+  ports:
+    - "8080:80"
+    # whatever port you put before the colon will be where pushpin-web is served
+  links:
+    - web
+
+rabbitmq:
+  image: rabbitmq
+  #environment:
+    #RABBITMQ_NODENAME: rabbitmq-server
