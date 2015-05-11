@@ -3,3 +3,6 @@ db/
 celerybeat/
 static/admin
 static/staticadmin
+venv/
+logs/
+docs/
