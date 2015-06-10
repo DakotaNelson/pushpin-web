@@ -1,35 +1,39 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 {% load staticfiles %}
-<html>
-<head>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" href="">
+
   <title>
   {% block title %}
   {% endblock %}
   </title>
-<meta charset="UTF-8">
 
-<!-- js libs go here -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js" charset="utf-8"></script>
-<script src="https://code.jquery.com/jquery-2.1.1.min.js" charset="utf-8"></script>
-{% block extra_js %}
-{% endblock %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
+  {% block extra_css %}
+  {% endblock %}
 
-<!-- css goes here -->
-<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
-{% block extra_css %}
-{% endblock %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js" charset="utf-8"></script>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js" charset="utf-8"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  {% block extra_js %}
+  {% endblock %}
 
-<script type="text/javascript">
-{% block embedded_js %}
-{% endblock %}
-</script>
+  <script type="text/javascript">
+  {% block embedded_js %}
+  {% endblock %}
+  </script>
 
 </head>
-<body>
-  {% block body %}
-  <br>
-  <br>
-  <center>Nothing to see here, move along.</center>
-  {% endblock %}
-</body>
-</html>
+
+  <div class="container-fluid">
+    {% block body %}
+    <br>
+    <br>
+    <center>Nothing to see here, move along.</center>
+    {% endblock %}
+  </div><!-- /.container -->
+</body></html>
