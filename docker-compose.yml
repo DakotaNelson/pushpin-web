@@ -7,6 +7,7 @@ web:
     - ./config/:/root/pushpin-app/config/:ro
     - ./pushpin-app/:/root/pushpin-app/
     - ./logs:/root/pushpin-app/logs/
+    - /usr/local/lib/python3.4/dist-packages/django/contrib/admin/static/admin/
   expose:
     - "8000"
   links:
@@ -38,6 +39,8 @@ nginx:
     - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./logs:/root/logs/
     # whatever directory is before the colon is where logs will go
+  volumes_from:
+    - web
   ports:
     - "8080:80"
     # whatever port you put before the colon will be where pushpin-web is served
