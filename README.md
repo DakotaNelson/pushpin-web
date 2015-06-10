@@ -7,15 +7,13 @@ A project by [Black Hills Information Security](http://blackhillsinfosec.com).
 ## Quickstart:
 First, make sure you've got Docker installed: https://docs.docker.com/installation/
 
-Run `start.sh` to download a pre-built image from Docker hub and get started super fast. Visit localhost:8000 in your browser to see the results. *In production environments, open up start.sh and configure some unique passwords!*
+Second, make sure you've got Docker Compose installed: https://docs.docker.com/compose/#installation-and-set-up
 
-Run `local.sh` to build the docker image from source and deploy it. This is useful in case you want to make any changes to pushpin locally. *In production environments, open up local.sh and configure some unique passwords!*
+To start, change to the project's root directory and run `docker-compose up`. This should start all the containers, link them all together, and get everything set up.
 
-Run `cleanup.sh` to remove your current pushpin deploy (either because you've had enough of this pushpin business, because you want to deploy a new version).
+Head to `localhost:8080` to take a look. Default username/password is 'test'. That's it - you're done!
 
-Run `redeploy.sh` to manually rebuild pushpin from the local Dockerfile, *destroy your pushpin deployment, including database*, then redeploy, wait a while, and show you some logfiles of the deployment. Useful for testing changes you've made locally.
-
-In case everything goes completely wrong, `panic_mode.sh` will stop and remove all of your Docker containers. **Use with caution!**
+Run `cleanup.sh` to remove a few artifacts (logs) left behind from each pushpin deploy - they're RO files, so you can't start up a new deploy until they're gone. Then run `docker-compose up` to start again.
 
 ## Acquiring API Keys
 * Taken from https://bitbucket.org/LaNMaSteR53/recon-ng/wiki/Usage%20Guide#!acquiring-api-keys
@@ -34,17 +32,16 @@ In case everything goes completely wrong, `panic_mode.sh` will stop and remove a
 Check out the section below on deploying places other than localhost. There are a few special things you have to do.
 
 ##### Q: How do I use this thing?
-Once you've run `start.sh`, go to localhost:8000, where you will be prompted to log in. Enter `test` and `test`, unless you configured the `PUSHPIN_PASSWORD` environment variable to be something else. Either way, username is test. Once you've logged in, you'll be redirected to the admin page, where you can add API keys. You should do so, or else you won't get any data. Once that's done, head back to localhost:8000 and you'll see the pushpin interface. Have fun!
+Once you've run `start.sh`, go to localhost:8080, where you will be prompted to log in. Enter `test` and `test`, unless you configured the `PUSHPIN_PASSWORD` environment variable to be something else. Either way, username is test. Once you've logged in, you'll be redirected to the admin page, where you can add API keys. You should do so, or else you won't get any data. Once that's done, head back to localhost:8000 and you'll see the pushpin interface. Have fun!
 
 ##### Q: When does data get pulled?
-Data is pulled hourly by celerybeat and manually every time a new location is added. If you don't see any data for a location you just added, try refreshing - it sometimes takes a minute or two to pull data from the various APIs.
+Data is pulled hourly by celerybeat and manually every time a new location is added. If you don't see any data for a location you just added, try refreshing - it sometimes takes a minute or two to pull data from the various APIs. Ideallly, the interface will eventually allow you to monitor the progress of background API pulls.
 
-##### Q: I'm getting an error `Error response from daemon: Conflict, The name <name> is already assigned to <some hash value>`. What do?
-Run `cleanup.sh` to delete your current pushpin containers in order to create new ones.
+##### Q: I'm getting an error `IOError: [Errno 13] Permission denied: u'/home/dnelson/projects/pushpin-web/logs/error.log'`. What do?
+Run `cleanup.sh` to delete the logs left over from a previous deploy. The logs are currently read-only, and so cannot be overwritten by the new deploy. Hopefully this will have a cleaner solution soon.
 
-##### Q: Everything is broken. HOW DO I MAKE IT STOP?!?
-`panic_mode.sh` will bring an end to the chaos. It'll also destroy **all** of your Docker containers, not just pushpin, so **be careful**!
-
+##### Q: Can I run this in the background?
+Yep: `docker-compose up -d` will run the cluster of containers in detached mode, and `docker-compose stop` will stop the detached cluster.
 
 ### Deploying other than localhost:
 

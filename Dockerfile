@@ -1,4 +1,5 @@
-FROM phusion/baseimage:0.9.16
+#FROM phusion/baseimage:0.9.16
+FROM ubuntu:trusty
 # FROM python:3.4
 
 MAINTAINER Dakota Nelson "dakota@blackhillsinfosec.com"
@@ -6,7 +7,6 @@ MAINTAINER Dakota Nelson "dakota@blackhillsinfosec.com"
 # install things
 RUN apt-get -qq update && apt-get install -y \
       python3-pip \
-      rabbitmq-server \
       python-dev \
       libpq-dev
 
@@ -15,11 +15,11 @@ COPY ./requirements.txt /root/requirements.txt
 RUN pip3 install -r /root/requirements.txt
 
 # set up all of the service directories for runit
-RUN mkdir /etc/service/static-server && \
-    mkdir /etc/service/rabbitmq && \
-    mkdir /etc/service/celerybeat && \
-    mkdir /etc/service/celery && \
-    mkdir /etc/service/django-server
+#RUN mkdir /etc/service/static-server && \
+#mkdir /etc/service/rabbitmq && \
+#mkdir /etc/service/celerybeat && \
+#mkdir /etc/service/celery && \
+#mkdir /etc/service/django-server
 
 # Serve the static files
 #COPY runscripts/static-server.sh /etc/service/static-server/run
@@ -29,25 +29,25 @@ RUN mkdir /etc/service/static-server && \
 #COPY runscripts/rabbitmq.sh /etc/service/rabbitmq/run
 
 # Run celery
-COPY runscripts/celery.sh /etc/service/celery/run
+#COPY runscripts/celery.sh /etc/service/celery/run
 
 # and celerybeat
-COPY runscripts/celerybeat.sh /etc/service/celerybeat/run
+#COPY runscripts/celerybeat.sh /etc/service/celerybeat/run
 
 # Run the Django server
 #ADD runscripts/django-server.sh /etc/service/django-server/run
 EXPOSE 8000
 
 # Set up the startup scripts
-RUN mkdir -p /etc/my_init.d
-ADD runscripts/init_scripts/ /etc/my_init.d/
+#RUN mkdir -p /etc/my_init.d
+#ADD runscripts/init_scripts/ /etc/my_init.d/
 
 # Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # add a non-root user to run the app as
 RUN useradd -ms /bin/bash app
-ENV HOME /home/app
+#ENV HOME /home/app
 
 # copy in the static files
 #COPY ./static/ /root/static
@@ -58,9 +58,9 @@ ENV HOME /home/app
 # copy in the Django files
 #COPY ./pushpin-app/ /root/pushpin-app
 
-RUN chown -R app:app /root
+#RUN chown -R app:app /root
 #chown -R app:app /usr/local && \
 #chown -R app:app /usr/lib
 
 # Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
+#CMD ["/sbin/my_init"]

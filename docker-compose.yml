@@ -5,7 +5,7 @@ web:
   command: /root/pushpin-app/config/web-run.sh
   volumes:
     - ./config/:/root/pushpin-app/config/:ro
-    - ./pushpin-app/:/root/pushpin-app
+    - ./pushpin-app/:/root/pushpin-app/
     - ./logs:/root/pushpin-app/logs/
   expose:
     - "8000"
@@ -16,8 +16,12 @@ web:
     POSTGRES_PASSWORD: 'mysecretpassword'
     POSTGRES_PORT: 5432
     PUSHPIN_PASSWORD: 'test'
+    # change this to change the password for pushpin
+    # either way, the username is 'test' (for now)
     SECRET_KEY: 'asdfjkl;1234567890qwertyuiop'
+    # CHANGE THIS TO SOMETHING SECURE WHEN YOU DEPLOY
     DEBUG: True
+    # Change to True for stack traces when errors occur
     ALLOWED_HOSTS: 'localhost'
     STATIC_URL: '/'
 
@@ -33,6 +37,7 @@ nginx:
     - ./static/:/root/static/:ro
     - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./logs:/root/logs/
+    # whatever directory is before the colon is where logs will go
   ports:
     - "8080:80"
     # whatever port you put before the colon will be where pushpin-web is served
@@ -45,7 +50,16 @@ rabbitmq:
     #RABBITMQ_NODENAME: rabbitmq-server
 
 celery:
-  image: celery
+  #image: celery
+  build: .
+  command: /root/pushpin-app/config/celery-run.sh
+  volumes:
+    - ./config/:/root/pushpin-app/config/:ro
+    - ./pushpin-app/:/root/pushpin-app/:ro
+      #- ./logs:/root/pushpin-app/logs/
   links:
     - rabbitmq:rabbit
     - postgres
+  environment:
+    POSTGRES_PASSWORD: 'mysecretpassword'
+    POSTGRES_PORT: 5432
