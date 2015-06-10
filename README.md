@@ -7,7 +7,7 @@ A project by [Black Hills Information Security](http://blackhillsinfosec.com).
 ## Quickstart:
 First, make sure you've got Docker installed: https://docs.docker.com/installation/
 
-Second, make sure you've got Docker Compose installed: https://docs.docker.com/compose/#installation-and-set-up
+Second, make sure you've got Docker Compose installed: https://docs.docker.com/compose/install/
 
 To start, change to the project's root directory and run `docker-compose up`. This should start all the containers, link them all together, and get everything set up.
 
@@ -37,11 +37,14 @@ Once you've run `start.sh`, go to localhost:8080, where you will be prompted to 
 ##### Q: When does data get pulled?
 Data is pulled hourly by celerybeat and manually every time a new location is added. If you don't see any data for a location you just added, try refreshing - it sometimes takes a minute or two to pull data from the various APIs. Ideallly, the interface will eventually allow you to monitor the progress of background API pulls.
 
-##### Q: I'm getting an error `IOError: [Errno 13] Permission denied: u'/home/dnelson/projects/pushpin-web/logs/error.log'`. What do?
+##### Q: I'm getting an error `IOError: [Errno 13] Permission denied: '/some/path/to/pushpin-web/logs/error.log'`. What do?
 Run `cleanup.sh` to delete the logs left over from a previous deploy. The logs are currently read-only, and so cannot be overwritten by the new deploy. Hopefully this will have a cleaner solution soon.
 
 ##### Q: Can I run this in the background?
 Yep: `docker-compose up -d` will run the cluster of containers in detached mode, and `docker-compose stop` will stop the detached cluster.
+
+##### Q: Can I configure more things?
+Yep: open up `docker-compose.yml` and you can fiddle arround with settings and variables. There are some comments there to help you out.
 
 ### Deploying other than localhost:
 

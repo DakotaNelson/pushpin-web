@@ -1,7 +1,5 @@
 web:
   build: .
-  #command: python3 ./pushpin-app/manage.py runserver 0.0.0.0:8000
-  #command: /usr/local/bin/uwsgi --ini /root/pushpin-app/config/wsgi_config.ini
   command: /root/pushpin-app/config/web-run.sh
   volumes:
     - ./config/:/root/pushpin-app/config/:ro
@@ -21,7 +19,7 @@ web:
     # either way, the username is 'test' (for now)
     SECRET_KEY: 'asdfjkl;1234567890qwertyuiop'
     # CHANGE THIS TO SOMETHING SECURE WHEN YOU DEPLOY
-    DEBUG: True
+    DEBUG: False
     # Change to True for stack traces when errors occur
     ALLOWED_HOSTS: 'localhost'
     STATIC_URL: '/'
@@ -30,7 +28,9 @@ postgres:
   image: postgres
   environment:
     POSTGRES_PASSWORD: 'mysecretpassword'
+    # Must be same as above, or the web container won't be able to access the db
     POSTGRES_USER: 'pushpin'
+    # This is the default for the above; if you change it, set POSTGRES_USER on the web container as well to match.
 
 nginx:
   image: nginx
@@ -53,7 +53,6 @@ rabbitmq:
     #RABBITMQ_NODENAME: rabbitmq-server
 
 celery:
-  #image: celery
   build: .
   command: /root/pushpin-app/config/celery-run.sh
   volumes:
@@ -65,4 +64,5 @@ celery:
     - postgres
   environment:
     POSTGRES_PASSWORD: 'mysecretpassword'
+    # Again, must match the settings on the postgres container
     POSTGRES_PORT: 5432
