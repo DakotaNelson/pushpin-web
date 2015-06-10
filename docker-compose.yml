@@ -21,8 +21,10 @@ web:
     # CHANGE THIS TO SOMETHING SECURE WHEN YOU DEPLOY
     DEBUG: False
     # Change to True for stack traces when errors occur
-    ALLOWED_HOSTS: 'localhost'
     STATIC_URL: '/'
+    #ALLOWED_HOSTS: "['*']"
+    ALLOWED_HOSTS: "['localhost']"
+    # configure this to be more restrictive on deploy
 
 postgres:
   image: postgres
@@ -66,3 +68,5 @@ celery:
     POSTGRES_PASSWORD: 'mysecretpassword'
     # Again, must match the settings on the postgres container
     POSTGRES_PORT: 5432
+    DEBUG: False
+    # Change to True for stack traces when errors occur
