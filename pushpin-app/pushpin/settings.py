@@ -163,7 +163,7 @@ LOGGING = {
         'applogfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': '/root/pushpin-app/logs/pushpin.log',
+            'filename': env('PUSHPIN_LOG_PATH','/root/pushpin-app/logs/pushpin.log'),
             'maxBytes': 1024*1024*15, # 15MB
             'backupCount': 10,
         },
