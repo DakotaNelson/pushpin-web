@@ -7,8 +7,8 @@ class Location(models.Model):
     longitude = models.FloatField()
     radius = models.FloatField()
     name = models.CharField(max_length = 200, unique=True)
-    date = models.DateTimeField('date created')
-    latest_data = models.DateTimeField('last time this location was updated')
+    date = models.DateTimeField(help_text='date created')
+    latest_data = models.DateTimeField(help_text='last time this location was updated')
     user = models.ForeignKey(User)
 
     def __str__(self):

@@ -1,6 +1,7 @@
 from modules import module
 
-from datetime import datetime
+from datetime import datetime, timedelta
+from time import strftime
 import json
 from map.models import Pushpin, Location
 
@@ -11,16 +12,31 @@ class Flickr(module.Module):
     def __init__(self):
         return
 
-    def run(self, locname, lat, lon, rad):
-        self.output("Collecting data from Flickr...")
+    def run(self, locname, lat, lon, rad, since):
+        self.output("Collecting data from Flickr for {}...".format(locname))
 
+        startTime = datetime.now()
         api_key = self.getKey('flickr_api')
 
         url = 'https://api.flickr.com/services/rest/'
         count = 0
         pins = []
         #self.heading(point, level=0)
-        payload = {'method': 'flickr.photos.search', 'format': 'json', 'api_key': api_key, 'lat': lat, 'lon': lon, 'has_geo': 1, 'min_taken_date': '1990-01-01 00:00:00', 'extras': 'date_upload,date_taken,owner_name,geo,url_t,url_m', 'radius': rad, 'radius_units':'km', 'per_page': 500}
+        stamp = since.strftime('%Y-%m-%d %H:%M:%S')
+        self.output("Getting all photos since {}...".format(stamp))
+        payload = {
+                   'method': 'flickr.photos.search',
+                   'format': 'json',
+                   'api_key': api_key,
+                   'lat': lat,
+                   'lon': lon,
+                   'has_geo': 1,
+                   'min_taken_date': stamp,
+                   'extras': 'date_upload,date_taken,owner_name,geo,url_t,url_m',
+                   'radius': rad,
+                   'radius_units':'km',
+                   'per_page': 500
+                  }
         processed = 0
         while True:
             try:
@@ -56,5 +72,9 @@ class Flickr(module.Module):
             if jsonobj['photos']['page'] >= jsonobj['photos']['pages']:
                 break
             payload['page'] = jsonobj['photos']['page'] + 1
+        self.output("Adding Flickr results to database...")
         self.addPins(locname, pins)
+        self.registerPull(locname, startTime)
+        timeDelta = datetime.now() - startTime
+        self.output("Flickr pull took {} seconds.".format(timeDelta.total_seconds()))
         #self.summarize(new, count)

@@ -162,6 +162,14 @@ class Module:
     # Database Methods
     #======================================================
 
+    def registerPull(self, locname, pull_time):
+        # set the database latest_data field - i.e. note down
+        # when a pull last occurred
+        location = Location.objects.get(name=locname)
+        location.latest_data = pull_time
+        location.save()
+        return
+
     def createPin(self, source, screen_name, profile_name, profile_url, media_url, thumb_url, message, latitude, longitude, time):
         ## NOTE: this doesn't actually create a pushpin object, merely a dict that's ready to take a location (which requires a db hit) and then be easily turned into one
         if not type(time) is datetime:

@@ -8,12 +8,14 @@ from django.core.management import call_command
 from django.forms import ModelForm
 from django.core.exceptions import ObjectDoesNotExist
 from map.tasks import youtubeTask, twitterTask, picasaTask, shodanTask
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
+import logging
 
 from map.models import Pushpin, Location
 from map.forms import LocationForm
 
+logger = logging.getLogger('pushpin')
 
 @login_required
 @require_GET
@@ -122,7 +124,7 @@ def noLocation(request):
 def addLocation(request):
     response_data = {}
 
-    print("Adding location...")
+    logger.info("Adding location...")
     # fill the form template with the incoming data
     form = LocationForm(request.POST)
     # save the form, but wait to let us make some changes
@@ -133,7 +135,9 @@ def addLocation(request):
         response_data['message'] = 'Error saving location: name must be unique and all fields filled.'
         return HttpResponse(json.dumps(response_data), content_type="application/json")
     location.date = datetime.now()
-    location.latest_data = datetime.now()
+    # start by getting last two years of data
+    two_years_ago = datetime.now() - timedelta(days=365*2)
+    location.latest_data = two_years_ago
     # TODO: add multiple users
     location.user = User.objects.get(username='test')
 
