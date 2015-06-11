@@ -60,7 +60,7 @@ celery:
   volumes:
     - ./config/:/root/pushpin-app/config/:ro
     - ./pushpin-app/:/root/pushpin-app/:ro
-      #- ./logs:/root/pushpin-app/logs/
+    - ./logs:/root/pushpin-app/logs/
   links:
     - rabbitmq:rabbit
     - postgres
@@ -70,3 +70,4 @@ celery:
     POSTGRES_PORT: 5432
     DEBUG: False
     # Change to True for stack traces when errors occur
+    PUSHPIN_LOG_PATH: '/root/pushpin-app/logs/celery.log'

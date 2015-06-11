@@ -154,10 +154,13 @@ LOGIN_REDIRECT_URL = '/map/location/'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(asctime)s | %(message)s'
+        },
     },
     'handlers': {
         'applogfile': {
@@ -166,11 +169,16 @@ LOGGING = {
             'filename': env('PUSHPIN_LOG_PATH','/root/pushpin-app/logs/pushpin.log'),
             'maxBytes': 1024*1024*15, # 15MB
             'backupCount': 10,
+            'formatter': 'simple',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level':'DEBUG',
         },
     },
     'loggers': {
         'pushpin': {
-            'handlers': ['applogfile',],
+            'handlers': ['applogfile','console',],
             'level': 'DEBUG',
         },
     }
