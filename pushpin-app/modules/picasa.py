@@ -8,14 +8,21 @@ class Picasa(module.Module):
         written by Tim Tomes (@LaNMaSteR53) '''
 
     def __init__(self):
+        # every module needs a way to identify it
+        self.name = "Picasa"
         return
 
-    def run(self, locname, lat, lon, rad):
+    def run(self, locname, lat, lon, rad, since):
+        self.output("Collecting data from Picasa...")
+        startTime = datetime.now()
+
         url = 'http://picasaweb.google.com/data/feed/api/all'
         count = 0
         pins = []
+        stamp = None
+        # TODO get results since
+        # This may not ever be implemented. Not like anyone uses Picasa anayway.
         kilometers_per_degree_latitude = 111.12
-        self.output("Collecting data from Picasa...")
         # http://www.johndcook.com/blog/2009/04/27/converting-miles-to-degrees-longitude-or-latitude
         west_boundary = float(lon) - (math.cos(math.radians(float(lat))) * float(rad) / kilometers_per_degree_latitude)
         south_boundary = float(lat) - (float(rad) / kilometers_per_degree_latitude)
@@ -57,4 +64,7 @@ class Picasa(module.Module):
             if next > 1000: break
             payload['start-index'] = next
         self.addPins(locname, pins)
+        self.registerPull(locname, self.name, startTime)
+        timeDelta = datetime.now() - startTime
+        self.output("Picasa pull took {} seconds.".format(timeDelta.total_seconds()))
         #self.summarize(new, count)

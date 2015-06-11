@@ -6,14 +6,19 @@ class Youtube(module.Module):
         written by Tim Tomes (@LaNMaSteR53) '''
 
     def __init__(self):
+        # every module needs a way to identify it
+        self.name = "Youtube"
         return
 
-    def run(self, locname, lat, lon, rad):
+    def run(self, locname, lat, lon, rad, since):
         self.output("Collecting data from Youtube...")
+        startTime = datetime.now()
+
         url = 'http://gdata.youtube.com/feeds/api/videos'
         count = 0
         pins = []
         point = str(lat) + ',' + str(lon)
+        stamp = None # TODO get since a date
         payload = {'alt': 'json', 'location': '%s!' % (point), 'location-radius': '%dkm' % (rad)}
         processed = 0
         while True:
@@ -21,6 +26,7 @@ class Youtube(module.Module):
                 resp = self.request(url, content=payload)
             except:
                 self.error("Unable to connect to Youtube API.")
+                break
             jsonobj = resp.json()
             if not jsonobj:
                 self.error(resp.text)
@@ -49,4 +55,7 @@ class Youtube(module.Module):
             if next > 500: break
             payload['start-index'] = next
         self.addPins(locname, pins)
+        self.registerPull(locname, self.name, startTime)
+        timeDelta = datetime.now() - startTime
+        self.output("Youtube pull took {} seconds.".format(timeDelta.total_seconds()))
         #self.summarize(new, count)

@@ -136,8 +136,8 @@ def addLocation(request):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
     location.date = datetime.now()
     # start by getting last two years of data
-    two_years_ago = datetime.now() - timedelta(days=365*2)
-    location.latest_data = two_years_ago
+    #two_years_ago = datetime.now() - timedelta(days=365*2)
+    #location.latest_data = two_years_ago
     # TODO: add multiple users
     location.user = User.objects.get(username='test')
 

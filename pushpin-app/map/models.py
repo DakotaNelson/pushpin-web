@@ -8,7 +8,7 @@ class Location(models.Model):
     radius = models.FloatField()
     name = models.CharField(max_length = 200, unique=True)
     date = models.DateTimeField(help_text='date created')
-    latest_data = models.DateTimeField(help_text='last time this location was updated')
+    latest_data = models.CharField(max_length=800,blank=True,help_text='Last time this location was updated. Serialized JSON dict containing {"moduleName":"ISOdate", ... }')
     user = models.ForeignKey(User)
 
     def __str__(self):

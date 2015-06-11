@@ -10,6 +10,8 @@ class Flickr(module.Module):
         written by Tim Tomes (@LaNMaSteR53) '''
 
     def __init__(self):
+        # every module needs a way to identify it
+        self.name = "Flickr"
         return
 
     def run(self, locname, lat, lon, rad, since):
@@ -74,7 +76,7 @@ class Flickr(module.Module):
             payload['page'] = jsonobj['photos']['page'] + 1
         self.output("Adding Flickr results to database...")
         self.addPins(locname, pins)
-        self.registerPull(locname, startTime)
+        self.registerPull(locname, self.name, startTime)
         timeDelta = datetime.now() - startTime
         self.output("Flickr pull took {} seconds.".format(timeDelta.total_seconds()))
         #self.summarize(new, count)

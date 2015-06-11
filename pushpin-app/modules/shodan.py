@@ -1,18 +1,24 @@
 from modules import module
 # unique to module
-from datetime import datetime
+from datetime import datetime, timedelta
+from time import strftime
 from django.conf import settings
 
 class Shodan(module.Module):
 
     def __init__(self):
+        # every module needs a way to identify it
+        self.name = "Shodan"
         return
 
-    def run(self, locname, lat, lon, rad):
+    def run(self, locname, lat, lon, rad, since):
         self.output("Collecting data from Shodan...")
+        startTime = datetime.now()
+
         pins = []
         point = str(lat) + "," + str(lon)
-        query = 'geo:%s,%d' % (point, rad)
+        stamp = since.strftime('%d/%m/%Y')
+        query = 'geo:{},{},after:{}'.format(point, rad, stamp)
         # setting limit to 1 to limit 1 API request per location
         limit = 1
         # TODO: shodan sometimes times out and throws an error
@@ -37,4 +43,7 @@ class Shodan(module.Module):
             time = datetime.strptime(host['timestamp'], '%Y-%m-%dT%H:%M:%S.%f')
             pins.append(self.createPin(source, screen_name, profile_name, profile_url, media_url, thumb_url, message, latitude, longitude, time))
         self.addPins(locname, pins)
+        self.registerPull(locname, self.name, startTime)
+        timeDelta = datetime.now() - startTime
+        self.output("Shodan pull took {} seconds.".format(timeDelta.total_seconds()))
         #self.summarize(new, len(results))

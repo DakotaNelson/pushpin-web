@@ -6,15 +6,21 @@ class Twitter(module.Module):
         written by Tim Tomes (@LaNMaSteR53) '''
 
     def __init__(self):
+        # every module needs a way to identify it
+        self.name = "Twitter"
         return
 
-    def run(self, locname, lat, lon, rad):
+    def run(self, locname, lat, lon, rad, since):
+        self.output('Collecting data from Twitter...')
+        startTime = datetime.now()
+
         url = 'https://api.twitter.com/1.1/search/tweets.json'
         count = 0
         pins = []
-        self.output('Collecting data from Twitter...')
+        stamp = (since - timedelta(days=1)).strftime("%Y-%m-%d")
+        # take a day off to make sure we don't lose anything
         point = str(lat) + "," + str(lon)
-        results = self.search_twitter_api({'q':'', 'geocode': '%s,%dkm' % (point, rad), 'count': '100'})
+        results = self.search_twitter_api({'q':'', 'geocode': '%s,%dkm' % (point, rad), 'count': '100', 'since':stamp})
 
         for tweet in results:
             if not tweet['geo']:
@@ -33,5 +39,8 @@ class Twitter(module.Module):
             pins.append(self.createPin(source, screen_name, profile_name, profile_url, media_url, thumb_url, message, latitude, longitude, time))
             count += 1
         self.addPins(locname, pins)
+        self.registerPull(locname, self.name, startTime)
+        timeDelta = datetime.now() - startTime
+        self.output("Twitter pull took {} seconds.".format(timeDelta.total_seconds()))
         #self.verbose('%s tweets processed.' % (len(results)))
         #self.summarize(new, count)

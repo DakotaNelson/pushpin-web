@@ -162,12 +162,21 @@ class Module:
     # Database Methods
     #======================================================
 
-    def registerPull(self, locname, pull_time):
+    def registerPull(self, locname, modname, pull_time):
         # set the database latest_data field - i.e. note down
         # when a pull last occurred
         location = Location.objects.get(name=locname)
-        location.latest_data = pull_time
+        try:
+            latestData = json.loads(location.latest_data)
+        except ValueError:
+            # no latest_data value
+            latestData = {}
+
+        latestData[modname] = pull_time.isoformat()
+
+        location.latest_data = json.dumps(latestData)
         location.save()
+        self.output("{} module finished.".format(modname))
         return
 
     def createPin(self, source, screen_name, profile_name, profile_url, media_url, thumb_url, message, latitude, longitude, time):
