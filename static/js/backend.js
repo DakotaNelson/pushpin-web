@@ -4,6 +4,10 @@ var BACKEND = {
   loc: null, // the currently active location
 
   getData: function() {
+    if(BACKEND.loc === null) {
+      // we're not in a specific location
+      return;
+    }
     $.ajax({
       url: window.location.pathname + "/data",
       type: "GET",
@@ -23,4 +27,31 @@ var BACKEND = {
     initializeAll(BACKEND.pins, BACKEND.loc);
   },
 
+  addLocation: function(successBack, failBack) {
+    $.ajax({
+      url: $(event.srcElement).attr('action'),
+      type: "POST",
+      data: $(event.srcElement).serialize(),
+      success: successBack,
+      error: failBack
+    });
+    return false;
+  },
+
+  deleteLocation: function(successBack, failBack) {
+    if(BACKEND.loc === null) {
+      // we're not in a specific location
+      return;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+      url: window.location.pathname + '/delete/',
+      headers: {"X-CSRFToken":csrftoken},
+      type: "POST",
+      data: {},
+      success: successBack,
+      error: failBack
+    });
+  },
 };

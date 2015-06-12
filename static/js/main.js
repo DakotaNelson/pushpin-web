@@ -3,7 +3,7 @@ $(document).ready( function() {
   $.facebox.settings.closeImage = GLOBAL.faceboxCloseImage;
   $.facebox.settings.loadingImage = GLOBAL.faceboxLoadingImage;
   $('a[rel*=facebox]').facebox();
-  $('#delete-location').on('click', deleteLocation);
+  $('.delete-location').on('click', deleteLocation);
 
   BACKEND.getData();
   LOCATIONS.onLoad();
@@ -19,21 +19,15 @@ function initializeAll(pins,loc) {
                 pins
                ); // creates the map
 
-  TIMELINE.createTimeline(pins); // creates the d3.js timeline
+  //TIMELINE.createTimeline(pins); // creates the d3.js timeline
+  // TODO what to do with this
 }
 
 /* Called when the submit button on the new location form is clicked.
  */
 function newLocationSubmit(e) {
   event.preventDefault();
-  $.ajax({
-    url: $(event.srcElement).attr('action'),
-    type: "POST",
-    data: $(event.srcElement).serialize(),
-    success: newLocationSuccess,
-    error: newLocationFail
-  });
-  return false;
+  BACKEND.addLocation(newLocationSuccess, newLocationFail);
 }
 
 /* Callback if the new location request succeeds. Updates the locations module.
@@ -43,7 +37,6 @@ function newLocationSuccess(d) {
     var message = d.message;
   }
   else{
-    // assume failure
     var message = "Success! " + d.message;
     message += "<br>It will take a minute or two to get data for this new location; it will appear on a refresh.";
   }
@@ -66,24 +59,15 @@ function newLocationFail(d) {
  */
 function deleteLocation(e) {
   event.preventDefault();
-  var csrftoken = getCookie('csrftoken');
-
-  $.ajax({
-    url: window.location.pathname + '/delete/',
-    headers: {"X-CSRFToken":csrftoken},
-    type: "POST",
-    data: {},
-    success: deleteLocationSuccess,
-    error: deleteLocationFail
-  });
+  BACKEND.deleteLocation(deleteLocationSuccess, deleteLocationFail);
 }
 
 /* Callback upon successful removal of a location
  */
 function deleteLocationSuccess(d) {
-  $("#delete-location").html("Location Removed");
+  //$("#delete-location").html("Location Removed");
   // remove the click handler
-  $("#delete-location").off();
+  //$("#delete-location").off();
   LOCATIONS.update();
   window.location = '/'
 }

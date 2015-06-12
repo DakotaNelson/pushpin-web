@@ -1,48 +1,17 @@
-{% extends "map/map.html" %}
+{% extends "map/base.html" %}
 {% load staticfiles %}
 
 {% block title %}
 Pushpin | Map
 {% endblock %}
 
-{% block embedded_js %}
-var GLOBAL = {
-  faceboxCloseImage: '{% static "images/closelabel.png" %}',
-  faceboxLoadingImage: '{% static "images/loading.gif" %}',
-};
-
-function init() {
-  // this is called on load from main.js
-  MAP.createMap(39.8282, // center of the contiguous US
-                -98.5795,
-                0,
-                4, // zoom level 4
-                [] // no pushpins
-               ); // creates the map
-}
-
-google.maps.event.addDomListener(window, 'load', init);
-{% endblock %}
-
-
-{% block nav %}{% endblock %}
-
-
-{% block timeline %}
-<div>
-  <center>
-    <br>
-    <br>
-    No location selected. Please select a location to the left or add a location using the link below.
-    <br>
-    <br>
-    <b>Additionally, make sure you add API keys in the <a href="{% url 'admin:index' %}" target="_blank">management pages</a>.</b>
-    <br>
-    <br>
-    <a href="#new-location" rel="facebox" class="horiz-item">
-      Add New Location
-    </a>
-  </center>
-</div>
+{% block body %}
+  <div class="full-body-text">
+    <h3>
+    <p>Welcome to pushpin-web! Add API keys using the "manage" button above, then add a location under the "locations" dropdown to get started.</p>
+    <p class="small">
+    Feel free to browse <a href="https://github.com/DakotaNelson/pushpin-web" target="_blank">the source code</a> and submit bugs or get in touch if you have any questions or comments.
+  </h3>
+  </div>
 {% endblock %}
 

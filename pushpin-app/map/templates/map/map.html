@@ -8,36 +8,26 @@
 
 {% block extra_css %}
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" />
-<link rel="stylesheet" type="text/css" href="{% static "css/facebox.css" %}" />
 {% endblock %}
 
 {% block extra_js %}
 <script src="http://maps.google.com/maps/api/js?sensor=false" charset="utf-8"></script>
 <script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js" charset="utf-8"></script>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="{% static "js/facebox.js" %}" charset="utf-8"></script>
 <script src="{% static "js/jquery.linkify.min.js" %}" charset="utf-8"></script>
-<script src="{% static "js/main.js" %}" charset="utf-8"></script>
-<script src="{% static "js/timeline.js" %}" charset="utf-8"></script>
+<!--<script src="{% static "js/timeline.js" %}" charset="utf-8"></script>-->
 <script src="{% static "js/map.js" %}" charset="utf-8"></script>
-<script src="{% static "js/locations.js" %}" charset="utf-8"></script>
-<script src="{% static "js/backend.js" %}" charset="utf-8"></script>
 {% endblock %}
 
 {% block embedded_js %}
-// NOTE: this is only here so that it can be used with templating. Ew.
-var GLOBAL = {
-  faceboxCloseImage: '{% static "images/closelabel.png" %}',
-  faceboxLoadingImage: '{% static "images/loading.gif" %}',
-};
-
+  // NOTE: this is only here so that it can be used with templating. Ew.
   // TODO turn this into an AJAX call (or something)
   BACKEND.loc = {"name": "{{location}}", "lat":{{location.latitude}}, "lon": {{location.longitude}}, "rad":{{location.radius}}};
 {% endblock embedded_js %}
 
 {% block body %}
     {% block nav %}
-    <div id="nav" class="nav rounded shaded">
+    <div id="sources" class="rounded shaded">
         <div id="filter">
           {% for source in sources %}
             <input type="checkbox" id="{{ source }}" onchange="MAP.toggleMarkers('{{ source }}');" checked="checked"/>{{ source }}<br />
@@ -56,7 +46,12 @@ var GLOBAL = {
     </div>
     {% endblock map %}
 
-    {% block locations %}
+    {% block media-toggle %}
+    <li id="map-toggle" class="active"><a href="#">Map</a></li>
+    <li id="media-toggle"><a href="{% url 'map:media view' location %}">Media</a></li>
+    {% endblock %}
+
+    <!--{% block locations %}
     <div id="locations">
       <div id="locations-inner">
         <table class="stripe">
@@ -77,7 +72,7 @@ var GLOBAL = {
         <a href="#new-location" rel="facebox" class="horiz-item">
           Add New Location</a>
         |
-        <a id="delete-location" href="#" class="horiz-item">
+        <a id="" href="#" class="horiz-item">
           Delete Current Location</a>
       </div>
       <div id="timeline"></div>
@@ -94,7 +89,7 @@ var GLOBAL = {
         <center><input type="submit" value="Add" /></center>
       </form>
       <span id="result-message"></span>
-    </div>
+    </div>-->
 
     <script type="text/template" id="pushpinTemplate">
       <div>
@@ -116,4 +111,5 @@ var GLOBAL = {
         </table>
       </div>
     </script>
+
 {% endblock %}

@@ -10,4 +10,5 @@ urlpatterns = patterns('',
         url(r'add-new-location/$', views.addLocation, name='track new location'),
         url(r'location/', views.noLocation, name='no location selected'),
         url(r'locations/', views.getLocations, name='get all locations'),
+        url(r'', views.noLocation, name='no location selected'),
 )

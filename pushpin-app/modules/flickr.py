@@ -22,6 +22,7 @@ class Flickr(module.Module):
 
         url = 'https://api.flickr.com/services/rest/'
         count = 0
+        threshold = 1000 # used to decide when to output status reports
         pins = []
         #self.heading(point, level=0)
         stamp = since.strftime('%Y-%m-%d %H:%M:%S')
@@ -39,7 +40,6 @@ class Flickr(module.Module):
                    'radius_units':'km',
                    'per_page': 500
                   }
-        processed = 0
         while True:
             try:
                 resp = self.request(url, content=payload)
@@ -69,14 +69,17 @@ class Flickr(module.Module):
                 except ValueError: time = datetime(1970, 1, 1)
                 pins.append(self.createPin(source, screen_name, profile_name, profile_url, media_url, thumb_url, message, latitude, longitude, time))
                 count += 1
-            processed += len(jsonobj['photos']['photo'])
-            #self.verbose('%s photos processed.' % (processed))
+                if count == threshold:
+                    threshold += 1000
+                    self.output('Flickr module processed {} photos so far...'.format(count))
+                    self.addPins(locname, pins)
+                    pins = []
             if jsonobj['photos']['page'] >= jsonobj['photos']['pages']:
                 break
             payload['page'] = jsonobj['photos']['page'] + 1
-        self.output("Adding Flickr results to database...")
         self.addPins(locname, pins)
         self.registerPull(locname, self.name, startTime)
         timeDelta = datetime.now() - startTime
+        self.output("Flickr pull gathered {} photos.".format(count))
         self.output("Flickr pull took {} seconds.".format(timeDelta.total_seconds()))
         #self.summarize(new, count)

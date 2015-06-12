@@ -66,5 +66,6 @@ class Picasa(module.Module):
         self.addPins(locname, pins)
         self.registerPull(locname, self.name, startTime)
         timeDelta = datetime.now() - startTime
+        self.output("Picasa pull gathered {} photos.".format(count))
         self.output("Picasa pull took {} seconds.".format(timeDelta.total_seconds()))
         #self.summarize(new, count)

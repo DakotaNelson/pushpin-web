@@ -1,14 +1,13 @@
 var LOCATIONS = {
 
-  elementId: "#locations-inner table",
-  elementWrapperId: "#locations-inner",
-  queryURL: '/map/locations', // where to get our data
+  //elementId: "#locations-inner table",
+  //elementWrapperId: "#locations-inner",
+  queryURL: '/map/locations/', // where to get our data
   data: null,
-  table: null, // reference to the DataTables object
+  //table: null, // reference to the DataTables object
 
   // initializes the table when the DOM is ready
   onLoad: function() {
-    LOCATIONS.initTable();
     LOCATIONS.update(); // triggers a magical update chain
   },
 
@@ -17,7 +16,7 @@ var LOCATIONS = {
     LOCATIONS.getData();
   },
 
-  // makes an ajax call to get data
+  // makes an ajax call to get data (imagine that)
   getData: function() {
     $.ajax({
       url: LOCATIONS.queryURL,
@@ -28,7 +27,7 @@ var LOCATIONS = {
   },
 
   // after a successful AJAX query, cleans and stores the data,
-  // then triggers a table render
+  // then triggers a render
   storeData: function(d) {
     LOCATIONS.data = d.map(function(datum) {
       var date = new Date(datum.date);
@@ -40,68 +39,33 @@ var LOCATIONS = {
       datum.date = date;
       return datum;
     });
-    LOCATIONS.draw(); // actually update the table
+    LOCATIONS.draw(); // actually update the DOM
   },
 
-  // re-render the table
+  // re-render using super-advanced templating methods
   draw: function() {
-    LOCATIONS.table.clear();
-    LOCATIONS.table.rows.add(LOCATIONS.data);
-    LOCATIONS.table.draw();
-  },
+    var linkStart = '<li><a href="'
+    var linkEnd = '">';
+    var endcap = '</a></li>';
+    var divider = '<li class="divider"></li>';
+    var header = '<li class="dropdown-header">Locations</li>';
 
-  // do initial setup on the table
-  initTable: function() {
-    LOCATIONS.table = $(LOCATIONS.elementId).DataTable( {
-      'autoWidth': false,
-      'paging': false,
-      'scrollX': false,
-      'scrollY': $(LOCATIONS.elementWrapperId).height()-60,
-      'scrollCollapse': true,
-      'data':LOCATIONS.data,
-      'columns': [
-        { name: 'name',
-          title: 'Name',
-          data: 'name',
-          width: '50%'
-        },
-        { name: 'latitude',
-          title: 'Latitude',
-          data: 'latitude',
-          width: '1%'
-            // it won't actually go any less wide than its contents
-        },
-        { name: 'longitude',
-          title: 'Longitude',
-          data: 'longitude',
-          width: '10px'
-        },
-        { name: 'radius',
-          title: 'Radius',
-          data: 'radius',
-          width: '10px'
-        },
-        { name: 'date',
-          title: 'Created',
-          data: 'date',
-          type: 'date',
-          width: '40%',
-          render: function(data, type, full, meta){
-            if(type == "display"){
-              var date = new Date(data);
-              var options = {year: "numeric", month: "short", day: "numeric"};
-              return date.toLocaleDateString('en-US',options);
-            }
-            return data;
-          }
-        }
-      ],
-      'rowCallback': function( row, data ) {
-        $(row).on('click',
-            function() {
-              document.location = '/map/location/' + encodeURIComponent(data.name);
-            });
-        },
-    });
+    // first, remove any locations that are already there
+    $("#navbar ul li.dropdown-header").nextAll().remove();
+
+    // then, loop through each location and add it (they'll end up being reverse chronological)
+    if(LOCATIONS.data.length > 0) {
+      _.each(LOCATIONS.data, function(datum) {
+        // start appending links to locations
+        var link = '/map/location/' + datum.name;
+        var html = linkStart + link + linkEnd + datum.name + endcap;
+        $("#navbar ul li.dropdown-header").after(html);
+      });
+    }
+    else {
+      // delete the header and divider
+      $("#navbar ul li.dropdown-header").remove();
+      $("#navbar ul li.divider").remove();
+    }
   },
 };

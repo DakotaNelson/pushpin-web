@@ -4,13 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="icon" href="">
+  <link rel="icon" href="{% static "images/favicon.ico" %}">
 
   <title>
   {% block title %}
   {% endblock %}
   </title>
 
+  <link rel="stylesheet" type="text/css" href="{% static "css/facebox.css" %}" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
   {% block extra_css %}
@@ -19,15 +20,72 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js" charset="utf-8"></script>
   <script src="https://code.jquery.com/jquery-2.1.1.min.js" charset="utf-8"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="{% static "js/facebox.js" %}" charset="utf-8"></script>
+  <script src="{% static "js/locations.js" %}" charset="utf-8"></script>
+  <script src="{% static "js/backend.js" %}" charset="utf-8"></script>
+  <script src="{% static "js/main.js" %}" charset="utf-8"></script>
   {% block extra_js %}
   {% endblock %}
 
   <script type="text/javascript">
-  {% block embedded_js %}
-  {% endblock %}
+    // this hurts me inside
+    var GLOBAL = {
+      faceboxCloseImage: '{% static "images/closelabel.png" %}',
+      faceboxLoadingImage: '{% static "images/loading.gif" %}',
+    };
+    {% block embedded_js %}
+    {% endblock %}
   </script>
 
 </head>
+<body>
+
+  <!-- Static navbar -->
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">pushpin-web</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <!--<li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>-->
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Locations  <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a class="new-location" rel="facebox" href="#new-location">Add New</a></li>
+              <li><a class="delete-location" href="#">Delete Current</a></li>
+              <li class="divider"></li>
+              <li class="dropdown-header">Locations</li>
+            </ul>
+          </li>
+          <!--<li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Jobs  <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="progress-list">
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                  </div>
+                </div>
+                DUMMY EXAMPLE
+              </li>
+            </ul>
+          </li>-->
+          <li><a href="/admin/" target="_blank">Manage</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {% block media-toggle %}
+          {% endblock %}
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+  </nav>
 
   <div class="container-fluid">
     {% block body %}
@@ -35,5 +93,18 @@
     <br>
     <center>Nothing to see here, move along.</center>
     {% endblock %}
+
+    <!-- used for the facebox "New Location" window -->
+    <div class="overlay" id="new-location">
+      <center><h1>Track a New Location</h1></center>
+      <form class="new-location-form" action="{% url 'map:track new location' %}" method="POST" onsubmit="newLocationSubmit();">
+        {% csrf_token %}
+        <center><table>
+          {{ locationForm.as_table }}
+        </table></center>
+        <center><input type="submit" value="Add" /></center>
+      </form>
+      <span id="result-message"></span>
+    </div>
   </div><!-- /.container -->
 </body></html>

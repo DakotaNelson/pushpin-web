@@ -45,5 +45,6 @@ class Shodan(module.Module):
         self.addPins(locname, pins)
         self.registerPull(locname, self.name, startTime)
         timeDelta = datetime.now() - startTime
+        self.output("Shodan pull gathered {} results.".format(len(pins)))
         self.output("Shodan pull took {} seconds.".format(timeDelta.total_seconds()))
         #self.summarize(new, len(results))

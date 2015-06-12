@@ -132,11 +132,11 @@ var MAP = {
   toggleMarkers: function(source) {
     if(document.getElementById(source).checked) {
         MAP.showMarkers(source);
-        TIMELINE.addActive(source);
+        //TIMELINE.addActive(source);
         // TODO move timeline functionality out of here
     } else {
         MAP.hideMarkers(source);
-        TIMELINE.removeActive(source);
+        //TIMELINE.removeActive(source);
     }
   },
 };

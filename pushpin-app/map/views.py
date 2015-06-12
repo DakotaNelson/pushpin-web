@@ -59,7 +59,7 @@ def locationData(request, locName):
     location = get_object_or_404(Location, name=locName)
 
     # then get pins based on that location
-    pushpins = Pushpin.objects.filter(location__name=locName).order_by('date')[:250]
+    pushpins = Pushpin.objects.filter(location__name=locName).order_by('-date')[:1000]
 
     sources = []
 
