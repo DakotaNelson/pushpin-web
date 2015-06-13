@@ -5,6 +5,7 @@ $(document).ready( function() {
   $('a[rel*=facebox]').facebox();
   $('.delete-location').on('click', deleteLocation);
   $("img.lazy").lazyload({
+                  failure_limit: 20,
                   threshold: 200,
                   effect: "fadeIn"
   });

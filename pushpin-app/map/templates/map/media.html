@@ -6,6 +6,13 @@
   Pushpin | Media | {{ location.name }}
 {% endblock %}
 
+{% block extra_js %}
+  <!--<script src="{% static "js/list.min.js" %}" charset="utf-8"></script>
+  <script src="{% static "js/list.pagination.min.js" %}" charset="utf-8"></script>-->
+  <script src="{% static "js/jquery.searchable.js" %}" charset="utf-8"></script>
+  <script src="{% static "js/media-view.js" %}" charset="utf-8"></script>
+{% endblock %}
+
 {% block media-toggle %}
 <li id="map-toggle"><a href="{% url 'map:map location' location %}">Map</a></li>
 <li id="media-toggle" class="active"><a href="#">Media</a></li>
@@ -22,6 +29,10 @@
 </div>-->
 
 <div id="media-wrapper">
+  <div class="form-group">
+    <label for="media-search">Search media</label>
+    <input id="media-search" class="form-control" placeholder="Search">
+  </div>
   <table id="media-table" class="table table-striped table-condensed">
     <thead>
       <tr>
@@ -30,20 +41,22 @@
         <th>Content</th>
         <th>Source</th>
         <th>Created</th>
+        <th class="hide">Sort-Date</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="list">
     {% for pin in pushpins %}
       <tr>
-        <td>
+        <td class="image">
           <a href='{{pin.profile_url}}' target='_blank'>
             <img class='prof_img rounded lazy' data-original='{{pin.thumb_url}}'>
           </a>
         </td>
-        <td>{{pin.profile_name}}</td>
-        <td>{{pin.message}}</td>
-        <td>{{pin.source}}</td>
-        <td>{{pin.date}}</td>
+        <td class="name">{{pin.profile_name}}</td>
+        <td class="message">{{pin.message}}</td>
+        <td class="source">{{pin.source}}</td>
+        <td class="date">{{pin.date}}</td>
+        <td class="sort-date hide">{{pin.date|date:"U"}}</td>
       </tr>
     {% endfor %}
     </tbody>

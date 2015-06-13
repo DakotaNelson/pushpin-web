@@ -81,7 +81,7 @@ def mediaView(request, locName):
 
     # then get pins based on that location
     start = datetime.now()
-    pushpins = Pushpin.objects.filter(location__name=locName).values("date","profile_name","thumb_url","message","source","profile_url")[:5000]
+    pushpins = Pushpin.objects.filter(location__name=locName).values("date","profile_name","thumb_url","message","source","profile_url")[:2000]
     time = datetime.now() - start
     logger.info("Querying pins for media page took {}".format(time))
 

@@ -144,7 +144,7 @@ input[type=checkbox] {
 }
 
 #media-wrapper {
-  margin-top: 60px;
+  margin-top: 50px;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -177,4 +177,12 @@ input[type=checkbox] {
   text-align: center;
   padding: 20px;
   padding-top: 80px;
+}
+.hide {
+  display: none;
+}
+#media-wrapper .form-group {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
 }
