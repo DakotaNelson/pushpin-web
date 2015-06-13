@@ -4,6 +4,10 @@ $(document).ready( function() {
   $.facebox.settings.loadingImage = GLOBAL.faceboxLoadingImage;
   $('a[rel*=facebox]').facebox();
   $('.delete-location').on('click', deleteLocation);
+  $("img.lazy").lazyload({
+                  threshold: 200,
+                  effect: "fadeIn"
+  });
 
   BACKEND.getData();
   LOCATIONS.onLoad();

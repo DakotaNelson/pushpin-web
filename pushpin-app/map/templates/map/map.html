@@ -25,6 +25,12 @@
   BACKEND.loc = {"name": "{{location}}", "lat":{{location.latitude}}, "lon": {{location.longitude}}, "rad":{{location.radius}}};
 {% endblock embedded_js %}
 
+
+{% block media-toggle %}
+<li id="map-toggle" class="active"><a href="#">Map</a></li>
+<li id="media-toggle"><a href="{% url 'map:media view' location %}">Media</a></li>
+{% endblock %}
+
 {% block body %}
     {% block nav %}
     <div id="sources" class="rounded shaded">
@@ -45,51 +51,6 @@
       </div>
     </div>
     {% endblock map %}
-
-    {% block media-toggle %}
-    <li id="map-toggle" class="active"><a href="#">Map</a></li>
-    <li id="media-toggle"><a href="{% url 'map:media view' location %}">Media</a></li>
-    {% endblock %}
-
-    <!--{% block locations %}
-    <div id="locations">
-      <div id="locations-inner">
-        <table class="stripe">
-        </table>
-      </div>
-    </div>
-    {% endblock locations %}
-
-    {% block timeline %}
-    <div id="timeline-wrapper">
-      <div id="location-controls">
-        <span id="current-location">
-          {{ location.name }}
-        </span>
-        <a href="{% url 'map:media view' location %}" target="_blank" class="horiz-item">
-          View Media for Location</a>
-        |
-        <a href="#new-location" rel="facebox" class="horiz-item">
-          Add New Location</a>
-        |
-        <a id="" href="#" class="horiz-item">
-          Delete Current Location</a>
-      </div>
-      <div id="timeline"></div>
-    </div>
-    {% endblock timeline %}
-
-    <div class="overlay" id="new-location">
-      <center><h1>Track a New Location</h1></center>
-      <form class="new-location-form" action="{% url 'map:track new location' %}" method="POST" onsubmit="newLocationSubmit();">
-        {% csrf_token %}
-        <center><table>
-          {{ locationForm.as_table }}
-        </table></center>
-        <center><input type="submit" value="Add" /></center>
-      </form>
-      <span id="result-message"></span>
-    </div>-->
 
     <script type="text/template" id="pushpinTemplate">
       <div>

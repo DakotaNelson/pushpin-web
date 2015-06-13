@@ -1,6 +1,5 @@
 html {
     height: 100%;
-    overflow: hidden;
 }
 body {
     font-family: Verdana, Geneva, sans-serif;
@@ -144,8 +143,13 @@ input[type=checkbox] {
 }
 
 #media-wrapper {
+  margin-top: 60px;
   margin-left: 10px;
   margin-right: 10px;
+}
+
+#media-table td {
+  vertical-align: middle;
 }
 
 .loading {

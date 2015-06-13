@@ -23,6 +23,7 @@
   <script src="{% static "js/facebox.js" %}" charset="utf-8"></script>
   <script src="{% static "js/locations.js" %}" charset="utf-8"></script>
   <script src="{% static "js/backend.js" %}" charset="utf-8"></script>
+  <script src="{% static "js/jquery.lazyload.min.js" %}" charset="utf-8"></script>
   <script src="{% static "js/main.js" %}" charset="utf-8"></script>
   {% block extra_js %}
   {% endblock %}
@@ -41,7 +42,7 @@
 <body>
 
   <!-- Static navbar -->
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -95,6 +96,7 @@
     {% endblock %}
 
     <!-- used for the facebox "New Location" window -->
+
     <div class="overlay" id="new-location">
       <center><h1>Track a New Location</h1></center>
       <form class="new-location-form" action="{% url 'map:track new location' %}" method="POST" onsubmit="newLocationSubmit();">

@@ -184,19 +184,8 @@ class Module:
         if not type(time) is datetime:
             raise ModuleError("Supplied time must be in datetime format.")
 
-        valid = False
-        for (s,l) in Pushpin.SOURCES:
-            # switch the verbose source out for the shorter DB version
-            if l.lower() == source.lower():
-                shortSrc = s
-                valid = True
-                break
-
-        if not valid:
-            raise ModuleException("Invalid pushpin source: " + source)
-
         data = dict(
-                source = shortSrc,
+                source = source,
                 screen_name = screen_name,
                 profile_name = profile_name,
                 profile_url = profile_url,

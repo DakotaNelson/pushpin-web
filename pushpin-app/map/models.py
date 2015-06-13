@@ -16,7 +16,7 @@ class Location(models.Model):
 
 class Pushpin(models.Model):
     # one piece of information (one tweet, one flickr photo, etc.)
-    TWITTER = "TW"
+    '''TWITTER = "TW"
     FLICKR = "FL"
     PICASA = "PI"
     SHODAN = "SH"
@@ -28,9 +28,9 @@ class Pushpin(models.Model):
                 (PICASA, "Picasa"),
                 (SHODAN, "Shodan"),
                 (YOUTUBE, "Youtube"),
-              )
+              )'''
 
-    source = models.CharField(choices=SOURCES, max_length=2)
+    source = models.CharField(max_length=20)
     date = models.DateTimeField('date published')
     screen_name = models.CharField(max_length=100)
     profile_name = models.CharField(max_length=100)

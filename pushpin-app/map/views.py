@@ -33,8 +33,6 @@ def mapView(request, locName):
     sources = []
 
     for pin in pushpins:
-        # get the display name, rather than the two letter abbreviation
-        pin.source = pin.get_source_display()
         # build a list of active sources
         if pin.source not in sources:
             sources.append(pin.source)
@@ -64,8 +62,6 @@ def locationData(request, locName):
     sources = []
 
     for pin in pushpins:
-        # get the display name, rather than the two letter abbreviation
-        pin.source = pin.get_source_display()
         # build a list of active sources
         if pin.source not in sources:
             sources.append(pin.source)
@@ -84,21 +80,26 @@ def mediaView(request, locName):
     location = get_object_or_404(Location, name=locName)
 
     # then get pins based on that location
-    pushpins = Pushpin.objects.filter(location__name=locName)
+    start = datetime.now()
+    pushpins = Pushpin.objects.filter(location__name=locName).values("date","profile_name","thumb_url","message","source","profile_url")[:5000]
+    time = datetime.now() - start
+    logger.info("Querying pins for media page took {}".format(time))
 
     sources = []
 
     for pin in pushpins:
-        # get the display name, rather than the two letter abbreviation
-        pin.source = pin.get_source_display()
         # build a list of active sources
-        if pin.source not in sources:
-            sources.append(pin.source)
+        if pin['source'] not in sources:
+            sources.append(pin['source'])
+
+    # NOTE: this will change if the class is changed in map/forms.py
+    locationForm = LocationForm()
 
     context = {
                 'sources': sources,
                 'location': location,
-                'pushpins': serializers.serialize('json', pushpins),
+                'pushpins': pushpins,
+                'locationForm': locationForm
               }
 
     return render(request, 'map/media.html', context)
