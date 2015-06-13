@@ -6,14 +6,6 @@
   Pushpin | Media | {{ location.name }}
 {% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css"css/facebox.css" %}" />
-{% endblock %}
-
-{% block extra_js %}
-<script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js" charset="utf-8"></script>
-{% endblock %}
-
 {% block media-toggle %}
 <li id="map-toggle"><a href="{% url 'map:map location' location %}">Map</a></li>
 <li id="media-toggle" class="active"><a href="#">Media</a></li>
