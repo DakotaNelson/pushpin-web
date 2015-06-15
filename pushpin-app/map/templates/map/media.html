@@ -48,11 +48,11 @@
     {% for pin in pushpins %}
       <tr>
         <td class="image">
-          <a href='{{pin.profile_url}}' target='_blank'>
+          <a href='{{pin.media_url}}' target='_blank'>
             <img class='prof_img rounded lazy' data-original='{{pin.thumb_url}}'>
           </a>
         </td>
-        <td class="name">{{pin.profile_name}}</td>
+        <td class="name"><a href="{{pin.profile_url}}" target="_blank">{{pin.profile_name}}</a></td>
         <td class="message">{{pin.message}}</td>
         <td class="source">{{pin.source}}</td>
         <td class="date">{{pin.date}}</td>
