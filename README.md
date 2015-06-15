@@ -35,7 +35,7 @@ Check out the section below on deploying places other than localhost. There are 
 Once you've run `start.sh`, go to localhost:8080, where you will be prompted to log in. Enter `test` and `test`, unless you configured the `PUSHPIN_PASSWORD` environment variable to be something else. Either way, username is test. Once you've logged in, you'll be redirected to the admin page, where you can add API keys. You should do so, or else you won't get any data. Once that's done, head back to localhost:8000 and you'll see the pushpin interface. Have fun!
 
 ##### Q: When does data get pulled?
-Data is pulled hourly by celerybeat and manually every time a new location is added. If you don't see any data for a location you just added, try refreshing - it sometimes takes a minute or two to pull data from the various APIs. Ideallly, the interface will eventually allow you to monitor the progress of background API pulls.
+Data is pulled periodically (depends on the module - Flickr is every 15 minutes, for example) by celerybeat and manually every time a new location is added. If you don't see any data for a location you just added, try refreshing - it sometimes takes a minute or two to pull data from the various APIs. Ideallly, the interface will eventually allow you to monitor the progress of background API pulls.
 
 ##### Q: I'm getting an error `IOError: [Errno 13] Permission denied: '/some/path/to/pushpin-web/logs/error.log'`. What do?
 Run `cleanup.sh` to delete the logs left over from a previous deploy. The logs are currently read-only, and so cannot be overwritten by the new deploy. Hopefully this will have a cleaner solution soon.
@@ -48,8 +48,9 @@ Yep: open up `docker-compose.yml` and you can fiddle arround with settings and v
 
 ### Deploying other than localhost:
 
-* Make sure to set the `STATIC_URL` environment variable to `http://yourDomainOrIP:8001/`. Note that the trailing slash is *very important*.
-* Set the `ALLOWED_HOSTS` environment variable to be the address of your host. (IP address or domain name) See [Django's docs](https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts) for details.
+Set the `ALLOWED_HOSTS` environment variable in `docker-compose.yml` to be the address of your host. (IP address or domain name, or both) See [Django's docs](https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts) for details.
+
+You'll also want to tighten up security a bit - in `docker-compose.yml`, changing at least the `SECRET_KEY` and `PUSHPIN_PASSWORD` variables is a good start.
 
 
 ### Rough notes on local usage for development:
@@ -78,10 +79,9 @@ Yep: open up `docker-compose.yml` and you can fiddle arround with settings and v
 
 ### Wishlist:
 * Capable of handling multiple users/authentication.
-* Make timeline on main page brushable to narrow displayed pins by date.
-* Break down Celery tasks to the point of getting a single location's data from a single API, use a lock to make sure only one worker pulls from an API at a time.
+* Ability to narrow displayed pins by date.
+* Break down Celery tasks to the point of getting a single location's data from a single API, use a lock to make sure only one worker pulls from an API at a time. This would help with scaling someday.
 * Intelligently deal with rate limiting, rather than just throttling API calls to safe levels without ever checking. (Could help with previous wishlist item.)
 * Use RabbitMQ as a backend to have Celery keep task status updated, show user progress of data-pulling tasks.
 * Be able to manually trigger a data pull from the webapp. (Especially useful if only one location is triggered.)
-* Only pull data from APIs since the last update. (i.e. keep track of when run last and use that information)
 * Linkify links in pushpins. The linkify library is already in place, it just needs to be used.
