@@ -52,7 +52,7 @@ class Flickr(module.Module):
             if jsonobj['stat'] == 'fail':
                 self.error(jsonobj['message'])
                 break
-            if not count: self.output('Collecting data for ~%s total photos...' % (jsonobj['photos']['total']))
+            if not count: self.output('Flickr collecting data for ~%s total photos...' % (jsonobj['photos']['total']))
             for photo in jsonobj['photos']['photo']:
                 latitude = photo['latitude']
                 longitude = photo['longitude']

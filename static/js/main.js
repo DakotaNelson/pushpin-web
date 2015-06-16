@@ -56,6 +56,7 @@ function newLocationSuccess(d) {
 /* Callback if the new location request fails. Displays error message.
  */
 function newLocationFail(d) {
+  console.log(d);
   var message = "Server error. Sorry about that. Refresh and try again?"
   $("#facebox #result-message").html(message);
 }

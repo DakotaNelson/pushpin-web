@@ -8,7 +8,7 @@ from django.core.management import call_command
 from django.forms import ModelForm
 from django.core.exceptions import ObjectDoesNotExist
 from map.tasks import youtubeTask, twitterTask, picasaTask, shodanTask
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import json
 import logging
 
@@ -125,7 +125,6 @@ def noLocation(request):
 def addLocation(request):
     response_data = {}
 
-    logger.info("Adding location...")
     # fill the form template with the incoming data
     form = LocationForm(request.POST)
     # save the form, but wait to let us make some changes
@@ -135,10 +134,13 @@ def addLocation(request):
         response_data['result'] = 'failed'
         response_data['message'] = 'Error saving location: name must be unique and all fields filled.'
         return HttpResponse(json.dumps(response_data), content_type="application/json")
-    location.date = datetime.now()
-    # start by getting last two years of data
-    #two_years_ago = datetime.now() - timedelta(days=365*2)
-    #location.latest_data = two_years_ago
+    location.date = datetime.now(timezone.utc).astimezone()
+    location.radius = round(location.radius)
+    if location.radius < 1:
+        location.radius = 1
+    if location.radius > 32:
+        location.radius = 32
+
     # TODO: add multiple users
     location.user = User.objects.get(username='test')
 

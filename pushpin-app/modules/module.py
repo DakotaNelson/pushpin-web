@@ -84,6 +84,8 @@ class Module:
         if r.status_code == requests.codes.ok:
             return r
         else:
+            print("ERROR!")
+            print(r.url)
             raise ModuleException("Request to " + url + " returned with error " + str(r.status_code) + ".\n Response body: " + r.text)
             return None
 

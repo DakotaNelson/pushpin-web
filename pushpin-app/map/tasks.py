@@ -1,7 +1,7 @@
 from celery.task.schedules import crontab
 from celery.task import periodic_task
 from celery import shared_task
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import dateutil.parser
 import json
 import logging
@@ -10,24 +10,6 @@ from modules import flickr, twitter, youtube, picasa, shodan
 from map.models import Pushpin, Location
 
 logger = logging.getLogger('pushpin')
-
-"""@shared_task
-@periodic_task(run_every=crontab(minute=0,hour="*/1"))
-def getData():
-    print("Running getData task!")
-    locations = list(Location.objects.order_by('-date'))
-
-    modules = []
-    #modules.append(flickr.Flickr())
-    modules.append(twitter.Twitter())
-    modules.append(youtube.Youtube())
-
-    for location in locations:
-        print('')
-        print("Collecting data for: " + location.name)
-        for module in modules:
-            module.run(location.name,location.latitude,location.longitude,location.radius)
-    return"""
 
 @shared_task
 @periodic_task(run_every=crontab(minute=0,hour="*/1"))
@@ -96,7 +78,9 @@ def runModule(module, location):
     except (ValueError, KeyError) as e:
         # module hasn't been run before (no entry in "last run" column)
         logger.debug("First time running module for this location.")
-        two_years_ago = datetime.now() - timedelta(days=365*2)
+        two_years_ago = datetime.now(timezone.utc).astimezone() - timedelta(days=365*2)
+        logger.debug("Two years ago: {}".format(two_years_ago))
+        #two_years_ago = datetime.now() - timedelta(days=365*2)
         latestData = two_years_ago
 
     logger.debug("{} module last run {} for this location.".format(module.name, latestData))

@@ -17,7 +17,7 @@ Run `cleanup.sh` to remove a few artifacts (logs) left behind from each pushpin 
 
 ## Acquiring API Keys
 * Taken from https://bitbucket.org/LaNMaSteR53/recon-ng/wiki/Usage%20Guide#!acquiring-api-keys
-* Youtube - None required.
+* Google API Key (used for Youtube) - Go to the [Google Developer's Console](https://console.developers.google.com/) and create a project. Once it's created, under "APIs & auth" on the left bar, select "APIs" and then search for Youtube and click "enable." Then, under "APIs & auth" on the left bar, select "Credentials" and then under "Public API access" select "Create new key."
 * Picasa - None required.
 * Flickr API Key (flickr_api) - TBD
 * Instagram API Key (instagram_api) - Log in [here](http://instagram.com/developer/clients/register/) with an existing Instagram account and register a new application. Add `http://localhost:31337` as the "OAuth redirect_uri". Click "Manage Clients" at the top of the screen and the API key will be available as the "CLIENT ID".
