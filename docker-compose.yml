@@ -19,7 +19,7 @@ web:
     # either way, the username is 'test' (for now)
     SECRET_KEY: 'asdfjkl;1234567890qwertyuiop'
     # CHANGE THIS TO SOMETHING SECURE WHEN YOU DEPLOY
-    DEBUG: False
+    DEBUG: null
     # Change to True for stack traces when errors occur
     STATIC_URL: '/'
     #ALLOWED_HOSTS: "['*']"
@@ -68,6 +68,6 @@ celery:
     POSTGRES_PASSWORD: 'mysecretpassword'
     # Again, must match the settings on the postgres container
     POSTGRES_PORT: 5432
-    DEBUG: False
+    DEBUG: null
     # Change to True for stack traces when errors occur
     PUSHPIN_LOG_PATH: '/root/pushpin-app/logs/celery.log'
